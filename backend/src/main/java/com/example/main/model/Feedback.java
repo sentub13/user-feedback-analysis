@@ -9,67 +9,116 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 100)
-    private String name;
+    @Column(name = "u_fname", length = 100)
+    private String u_fname;
 
-    @Column(name = "email", length = 100)
-    private String email;
+    @Column(name = "u_lastname", length = 100)
+    private  String u_lastname;
 
-    @Column(name = "easy_to_use", length = 10)
-    private String easyToUse;
+    @Column(name = "u_id", length = 15)
+    private Long u_id;
 
-    @Column(name = "helpful_support", length = 10)
-    private String helpfulSupport;
+    @Column(name = "u_email", length = 100)
+    private String u_email;
 
-    @Column(name = "found_what_needed", length = 10)
-    private String foundWhatNeeded;
+    @Column(name = "u_frequency", length = 10)
+    private Integer u_frequency;
 
-    @Column(name = "use_again", length = 10)
-    private String useAgain;
+    @Column(name = "u_suggestions", length = 10)
+    private String u_suggestions;
 
-    @Column(name = "recommend", length = 10)
-    private String recommend;
+    @Column(name = "u_satisfaction", length = 10)
+    private String u_satisfaction;
 
-    @Column(name = "comments", length = 500)
-    private String comments;
+    @Column(name = "u_issues_faced", length = 10)
+    private String u_issues_faced;
+
+    @Column(name = "u_recommendation")
+    private Boolean u_recommendation;
+
+    @Column(name = "u_used_feature", length = 500)
+    private String u_used_feature;
 
     public Feedback() {}
-
-    public Feedback(String name, String email, String easyToUse, String helpfulSupport, String foundWhatNeeded, String useAgain, String recommend, String comments) {
-        this.name = name;
-        this.email = email;
-        this.easyToUse = easyToUse;
-        this.helpfulSupport = helpfulSupport;
-        this.foundWhatNeeded = foundWhatNeeded;
-        this.useAgain = useAgain;
-        this.recommend = recommend;
-        this.comments = comments;
+    public Feedback(String u_fname, String u_lastname, Long u_id, String u_email, Integer u_frequency,
+                    String u_suggestions, String u_satisfaction, String u_issues_faced,
+                    Boolean u_recommendation, String u_used_feature) {
+        this.u_fname = u_fname;
+        this.u_lastname = u_lastname;
+        this.u_id = u_id;
+        this.u_email = u_email;
+        this.u_frequency = u_frequency;
+        this.u_suggestions = u_suggestions;
+        this.u_satisfaction = u_satisfaction;
+        this.u_issues_faced = u_issues_faced;
+        this.u_recommendation = u_recommendation;
+        this.u_used_feature = u_used_feature;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getEasyToUse() { return easyToUse; }
-    public void setEasyToUse(String easyToUse) { this.easyToUse = easyToUse; }
-
-    public String getHelpfulSupport() { return helpfulSupport; }
-    public void setHelpfulSupport(String helpfulSupport) { this.helpfulSupport = helpfulSupport; }
-
-    public String getFoundWhatNeeded() { return foundWhatNeeded; }
-    public void setFoundWhatNeeded(String foundWhatNeeded) { this.foundWhatNeeded = foundWhatNeeded; }
-
-    public String getUseAgain() { return useAgain; }
-    public void setUseAgain(String useAgain) { this.useAgain = useAgain; }
-
-    public String getRecommend() { return recommend; }
-    public void setRecommend(String recommend) { this.recommend = recommend; }
-
-    public String getComments() { return comments; }
-    public void setComments(String comments) { this.comments = comments; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getU_fname() {
+        return u_fname;
+    }
+    public void setU_fname(String u_fname) {
+        this.u_fname = u_fname;
+    }
+    public String getU_lastname() {
+        return u_lastname;
+    }
+    public void setU_lastname(String u_lastname) {
+        this.u_lastname = u_lastname;
+    }
+    public Long getU_id() {
+        return u_id;
+    }
+    public void setU_id(Long u_id) {
+        this.u_id = u_id;
+    }
+    public String getU_email() {
+        return u_email;
+    }
+    public void setU_email(String u_email) {
+        this.u_email = u_email;
+    }
+    public Integer getU_frequency() {
+        return u_frequency;
+    }
+    public void setU_frequency(Integer u_frequency) {
+        this.u_frequency = u_frequency;
+    }
+    public String getU_suggestions() {
+        return u_suggestions;
+    }
+    public void setU_suggestions(String u_suggestions) {
+        this.u_suggestions = u_suggestions;
+    }
+    public String getU_satisfaction() {
+        return u_satisfaction;
+    }
+    public void setU_satisfaction(String u_satisfaction) {
+        this.u_satisfaction = u_satisfaction;
+    }
+    public String getU_issues_faced() {
+        return u_issues_faced;
+    }
+    public void setU_issues_faced(String u_issues_faced) {
+        this.u_issues_faced = u_issues_faced;
+    }
+    public Boolean getU_recommendation() {
+        return u_recommendation;
+    }
+    public void setU_recommendation(Boolean u_recommendation) {
+        this.u_recommendation = u_recommendation;
+    }
+    public String getU_used_feature() {
+        return u_used_feature;
+    }
+    public void setU_used_feature(String u_used_feature) {
+        this.u_used_feature = u_used_feature;
+    }
 }
