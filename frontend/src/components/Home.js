@@ -93,21 +93,21 @@ function Home() {
           
           <form onSubmit={handleSubmit}>
             <FormInput
-              label="1.Please enter your first name :"
+              label="Please enter your first name :"
               name="u_fname"
               value={formData.u_fname}
               onChange={handleChange}
             />
 
             <FormInput
-              label="2. Please enter your last name :"
+              label="Please enter your last name :"
               name="u_lastname"
               value={formData.u_lastname}
               onChange={handleChange}
             />
 
             <FormInput
-              label="3. Please enter your User Id : "
+              label="Please enter your User Id : "
               name="u_id"
               value={formData.u_id}
               onChange={handleChange}
@@ -115,49 +115,36 @@ function Home() {
             />
 
             <FormInput
-              label="4. Please enter your Email : "
+              label="Please enter your Email : "
               name="u_email"
               type="email"
               value={formData.u_email}
               onChange={handleChange}
             />
 
+
+            <h5 className='title mb-3'>Take Survey</h5>
+
             <RadioGroup
-              label="5. How frequently do you use the portal?"
+              label="1. How frequently do you use the portal?"
               name="u_frequency"
               options={frequencyOptions}
               value={formData.u_frequency}
               onChange={handleChange}
               error={errors.u_frequency}
-            />
-
-            <TextArea
-              label="6. Do you have any suggestions to improve our portal features? *"
-              name="u_suggestions"
-              value={formData.u_suggestions}
-              onChange={handleChange}
-              error={errors.u_suggestions}
-            />
+            />           
 
             <RadioGroup
-              label="7. Are you satisfied with this portal overall? *"
+              label="2. Are you satisfied with this portal overall? *"
               name="u_satisfaction"
               options={satisfactionOptions}
               value={formData.u_satisfaction}
               onChange={handleChange}
               error={errors.u_satisfaction}
-            />
-
-            <TextArea
-              label="8. Did you face any issues while using the portal? *"
-              name="u_issues_faced"
-              value={formData.u_issues_faced}
-              onChange={handleChange}
-              error={errors.u_issues_faced}
-            />
+            />           
 
             <RadioGroup
-              label="9. Will you recommend this portal to your colleagues? *"
+              label="3. Will you recommend this portal to your colleagues? *"
               name="u_recommendation"
               options={recommendOptions}
               value={formData.u_recommendation}
@@ -166,12 +153,29 @@ function Home() {
             />
 
             <RadioGroup
-              label="10. What is your most used feature? *"
+              label="4. What is your most used feature? *"
               name="u_used_feature"
               options={featureOptions}
               value={formData.u_used_feature}
               onChange={handleChange}
               error={errors.u_used_feature}
+            />
+            
+
+            <TextArea
+              label="5. Did you face any issues while using the portal? *"
+              name="u_issues_faced"
+              value={formData.u_issues_faced}
+              onChange={handleChange}
+              error={errors.u_issues_faced}
+            />
+
+            <TextArea
+              label="6. Do you have any suggestions to improve our portal features? *"
+              name="u_suggestions"
+              value={formData.u_suggestions}
+              onChange={handleChange}
+              error={errors.u_suggestions}
             />
 
             <div className="mb-3 text-start">
