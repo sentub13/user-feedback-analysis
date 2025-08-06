@@ -1,6 +1,7 @@
 package com.example.main.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "feedback")
@@ -24,13 +25,13 @@ public class Feedback {
     @Column(name = "u_frequency", length = 10)
     private Integer u_frequency;
 
-    @Column(name = "u_suggestions", length = 10)
+    @Column(name = "u_suggestions", length = 500)
     private String u_suggestions;
 
-    @Column(name = "u_satisfaction", length = 10)
+    @Column(name = "u_satisfaction", length = 50)
     private String u_satisfaction;
 
-    @Column(name = "u_issues_faced", length = 10)
+    @Column(name = "u_issues_faced", length = 500)
     private String u_issues_faced;
 
     @Column(name = "u_recommendation")
@@ -39,7 +40,12 @@ public class Feedback {
     @Column(name = "u_used_feature", length = 500)
     private String u_used_feature;
 
-    public Feedback() {}
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime created_at;
+
+    public Feedback() {
+		this.created_at = LocalDateTime.now();
+	}
     public Feedback(String u_fname, String u_lastname, Long u_id, String u_email, Integer u_frequency,
                     String u_suggestions, String u_satisfaction, String u_issues_faced,
                     Boolean u_recommendation, String u_used_feature) {
@@ -121,4 +127,18 @@ public class Feedback {
     public void setU_used_feature(String u_used_feature) {
         this.u_used_feature = u_used_feature;
     }
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+
 }
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 body {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 400;
   font-family: "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -47,7 +47,12 @@ function Home() {
         setFormData(initialFormState);
       } catch (error) {
         console.error('Feedback submission error:', error);
-        alert('Error submitting feedback. Please try again.');
+        const errorMessage = error.message.includes('Network error') 
+          ? 'Unable to connect to server. Please check your connection and try again.'
+          : error.message.includes('500')
+          ? 'Server error occurred. Please try again later or contact support.'
+          : `Error: ${error.message}`;
+        alert(errorMessage);
       }
     } else {
       setErrors(newErrors);
@@ -97,6 +102,7 @@ function Home() {
               name="u_fname"
               value={formData.u_fname}
               onChange={handleChange}
+              style={{width: '200px'}}
             />
 
             <FormInput
@@ -104,6 +110,7 @@ function Home() {
               name="u_lastname"
               value={formData.u_lastname}
               onChange={handleChange}
+              style={{width: '200px'}}
             />
 
             <FormInput
@@ -112,6 +119,7 @@ function Home() {
               value={formData.u_id}
               onChange={handleChange}
               type="number"
+              style={{width: '200px'}}
             />
 
             <FormInput
@@ -120,8 +128,8 @@ function Home() {
               type="email"
               value={formData.u_email}
               onChange={handleChange}
+              style={{width: '200px'}}
             />
-
 
             <h5 className='title mb-3'>Take Survey</h5>
 
@@ -159,8 +167,7 @@ function Home() {
               value={formData.u_used_feature}
               onChange={handleChange}
               error={errors.u_used_feature}
-            />
-            
+            />            
 
             <TextArea
               label="5. Did you face any issues while using the portal? *"
