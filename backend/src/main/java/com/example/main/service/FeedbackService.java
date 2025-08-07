@@ -35,8 +35,8 @@ public class FeedbackService {
             }
         }
         SentimentAnalysis sentimentAnalysis = new SentimentAnalysis();
-        sentimentAnalysis.setU_id(savedFeedback.getU_id());
-        sentimentAnalysis.setSentiment(sentiment);
+        sentimentAnalysis.setFb_id(savedFeedback.getU_id());
+        sentimentAnalysis.setFb_overall_summary(sentiment);
         sentimentAnalysisRepository.save(sentimentAnalysis);
         return savedFeedback;
     }
