@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
-  <artifactId>excel-to-pdf-converter</artifactId>
+  <artifactId>user-feedBack-analysis</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>excel-to-pdf-converter</name>
+  <name>User FeedBack Analysis</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -89,7 +89,6 @@
         <artifactId>springdoc-openapi-ui</artifactId>
         <version>1.6.15</version>
     </dependency>
-
 
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
