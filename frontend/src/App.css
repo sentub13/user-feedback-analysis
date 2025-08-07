@@ -32,6 +32,10 @@ input[type="radio"]:checked {
 .title {
   color: #2193b0;
 }
+.title2 {
+  color: #fff;
+  background: #2193b0;
+}
 
 .form-label {
   font-weight: 500;

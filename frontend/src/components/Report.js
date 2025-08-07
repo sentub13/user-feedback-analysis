@@ -132,7 +132,7 @@ function Report() {
       
       {/* Filter Section */}
       <div className="card mb-4">
-        <div className="card-header">
+        <div className="card-header title2">
           <h5 className="mb-0">Filters</h5>
         </div>
         <div className="card-body">
@@ -209,7 +209,7 @@ function Report() {
           {/* Data Table */}
           <div className="col-md-8">
             <div className="card">
-              <div className="card-header">
+              <div className="card-header title2">
                 <h5 className="mb-0 ">Feedback Data ({filteredData.length} records)</h5>
               </div>
               <div className="card-body">
@@ -275,7 +275,7 @@ function Report() {
           {/* Pie Chart */}
           <div className="col-md-4">
             <div className="card">
-              <div className="card-header">
+              <div className="card-header title2">
                 <h5 className="mb-0">Recommendation Distribution</h5>
               </div>
               <div className="card-body">
