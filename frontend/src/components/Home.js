@@ -7,12 +7,12 @@ const initialFormState = {
   u_lastname: '',
   u_id: '',
   u_email: '',
-  u_frequency: '',
-  u_suggestions: '',
+  u_frequency: '',  
   u_satisfaction: '',
-  u_issues_faced: '',
   u_recommendation: '',
-  u_used_feature: ''
+  u_used_feature: '',
+  u_issues_faced: '',
+  u_suggestions: '',
 };
 
 function Home() {
@@ -28,12 +28,12 @@ function Home() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.u_frequency) newErrors.u_frequency = 'This field is required';
-    if (!formData.u_suggestions) newErrors.u_suggestions = 'This field is required';
-    if (!formData.u_satisfaction) newErrors.u_satisfaction = 'This field is required';
-    if (!formData.u_issues_faced) newErrors.u_issues_faced = 'This field is required';
+    if (!formData.u_frequency) newErrors.u_frequency = 'This field is required';    
+    if (!formData.u_satisfaction) newErrors.u_satisfaction = 'This field is required';    
     if (!formData.u_recommendation) newErrors.u_recommendation = 'This field is required';
     if (!formData.u_used_feature) newErrors.u_used_feature = 'This field is required';
+    if (!formData.u_issues_faced) newErrors.u_issues_faced = 'This field is required';
+    if (!formData.u_suggestions) newErrors.u_suggestions = 'This field is required';
     return newErrors;
   };
 
@@ -60,12 +60,12 @@ function Home() {
   };
 
   const frequencyOptions = [
-    { value: '1', label: 'Daily' },
-    { value: '2', label: 'Weekly' },
-    { value: '3', label: 'Monthly' },
-    { value: '4', label: 'Rarely' },
-    { value: '5', label: 'First time' },
-    { value: '6', label: 'Never' }
+    { value: 'Daily', label: 'Daily' },
+    { value: 'Weekly', label: 'Weekly' },
+    { value: 'Monthly', label: 'Monthly' },
+    { value: 'Rarely', label: 'Rarely' },
+    { value: 'First time', label: 'First time' },
+    { value: 'Never', label: 'Never' }
   ];
 
   const satisfactionOptions = [
@@ -118,7 +118,7 @@ function Home() {
               name="u_id"
               value={formData.u_id}
               onChange={handleChange}
-              type="number"
+              type="number" 
               style={{width: '200px'}}
             />
 
