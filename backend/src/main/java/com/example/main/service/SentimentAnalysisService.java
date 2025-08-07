@@ -1,15 +1,22 @@
 package com.example.main.service;
 
+import com.example.main.model.SentimentAnalysis;
+import com.example.main.model.SentimentResponse;
+import com.example.main.repository.SentimentAnalysisRepository;
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.ling.*;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.main.model.SentimentResponse;
+
 import java.util.*;
 
 @Service
 public class SentimentAnalysisService {
+
+    @Autowired
+    private SentimentAnalysisRepository sentimentAnalysisRepository;
 
     private final StanfordCoreNLP pipeline;
 
@@ -19,20 +26,6 @@ public class SentimentAnalysisService {
         this.pipeline = new StanfordCoreNLP(props);
     }
 
-    private String normalizeSentiment(String sentiment) {
-        if (sentiment == null) return "Neutral";
-        switch (sentiment.toLowerCase()) {
-            case "very positive":
-            case "positive":
-                return "Positive";
-            case "very negative":
-            case "negative":
-                return "Negative";
-            default:
-                return "Neutral";
-        }
-    }
-
     public List<SentimentResponse> analyzeSentiment(String text) {
         List<SentimentResponse> results = new ArrayList<>();
 
@@ -40,29 +33,20 @@ public class SentimentAnalysisService {
         Annotation annotation = new Annotation(text);
         pipeline.annotate(annotation);
 
-        // Process all sentences to get overall sentiment
+        // Process each sentence
         List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-
-        // Calculate overall sentiment from all sentences
-        Map<String, Integer> sentimentCounts = new HashMap<>();
         for (CoreMap sentence : sentences) {
             String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            sentiment = normalizeSentiment(sentiment);
-            sentimentCounts.put(sentiment, sentimentCounts.getOrDefault(sentiment, 0) + 1);
+            SentimentResponse response = new SentimentResponse();
+            response.setSentence(sentence.toString());
+            response.setSentiment(sentiment);
+            results.add(response);
         }
 
-        // Get the most common sentiment
-        String overallSentiment = sentimentCounts.entrySet().stream()
-            .max(Map.Entry.comparingByValue())
-            .map(Map.Entry::getKey)
-            .orElse("Neutral");
-
-        // Return single response for entire text
-        SentimentResponse response = new SentimentResponse();
-        response.setSentence(text);
-        response.setSentiment(overallSentiment);
-        results.add(response);
-
         return results;
+    }
+
+    public List<SentimentAnalysis> getAllSentimentAnalysis() {
+        return sentimentAnalysisRepository.findAll();
     }
 }

@@ -41,7 +41,7 @@ public class FeedbackService {
         String text5 = savedFeedback.getU_issues_faced() != null ? savedFeedback.getU_issues_faced() : "";
         String text6 = savedFeedback.getU_suggestions() != null ? savedFeedback.getU_suggestions() : "";
 
-        // Analyze sentiment for each question
+        // Analyze sentiment for each question using the injected SentimentAnalysisService instance
         String sentiment1 = null, sentiment2 = null, sentiment3 = null, sentiment4 = null, sentiment5 = null, sentiment6 = null;
         List<SentimentResponse> responses;
 
@@ -80,6 +80,7 @@ public class FeedbackService {
         sentimentAnalysis.setFb_issues_faced(sentiment5);
         sentimentAnalysis.setFb_suggestions(sentiment6);
         sentimentAnalysisRepository.save(sentimentAnalysis);
+        // sentimentAnalysis.setFb_id(savedFeedback.getCreated_at());
         return savedFeedback;
     }
 
