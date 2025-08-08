@@ -28,12 +28,26 @@ function Home() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.u_frequency) newErrors.u_frequency = 'This field is required';    
-    if (!formData.u_satisfaction) newErrors.u_satisfaction = 'This field is required';    
-    if (!formData.u_recommendation) newErrors.u_recommendation = 'This field is required';
-    if (!formData.u_used_feature) newErrors.u_used_feature = 'This field is required';
-    if (!formData.u_issues_faced) newErrors.u_issues_faced = 'This field is required';
-    if (!formData.u_suggestions) newErrors.u_suggestions = 'This field is required';
+    // Mandatory fields validation
+    if (!formData.u_fname) newErrors.u_fname = 'This field is required';
+    if (!formData.u_lastname) newErrors.u_lastname = 'This field is required';
+    if (!formData.u_id) newErrors.u_id = 'This field is required';
+    if (!formData.u_email) newErrors.u_email = 'This field is required';
+
+    // At least one field from the rest should be filled
+    const optionalFields = [
+      formData.u_frequency,
+      formData.u_satisfaction,
+      formData.u_recommendation,
+      formData.u_used_feature,
+      formData.u_issues_faced,
+      formData.u_suggestions
+    ];
+
+    if (!optionalFields.some(field => field !== '')) {
+      newErrors.general = 'At least one survey question must be answered';
+    }
+
     return newErrors;
   };
 
@@ -106,40 +120,45 @@ function Home() {
           
           <form onSubmit={handleSubmit}>
             <FormInput
-              label="Please enter your first name :"
+              label="Please enter your first name : *"
               name="u_fname"
               value={formData.u_fname}
               onChange={handleChange}
               style={{width: '200px'}}
+              error={errors.u_fname}
             />
 
             <FormInput
-              label="Please enter your last name :"
+              label="Please enter your last name : *"
               name="u_lastname"
               value={formData.u_lastname}
               onChange={handleChange}
               style={{width: '200px'}}
+              error={errors.u_lastname}
             />
 
             <FormInput
-              label="Please enter your User Id : "
+              label="Please enter your User Id : *"
               name="u_id"
               value={formData.u_id}
               onChange={handleChange}
               type="number" 
               style={{width: '200px'}}
+              error={errors.u_id}
             />
 
             <FormInput
-              label="Please enter your Email : "
+              label="Please enter your Email : *"
               name="u_email"
               type="email"
               value={formData.u_email}
               onChange={handleChange}
               style={{width: '200px'}}
+              error={errors.u_email}
             />
 
             <h5 className='title mb-3'>Take Survey</h5>
+            {errors.general && <div className="text-danger mb-3">{errors.general}</div>}
 
             <RadioGroup
               label="1. How frequently do you use the portal?"
@@ -147,50 +166,44 @@ function Home() {
               options={frequencyOptions}
               value={formData.u_frequency}
               onChange={handleChange}
-              error={errors.u_frequency}
             />           
 
             <RadioGroup
-              label="2. Are you satisfied with this portal overall? *"
+              label="2. Are you satisfied with this portal overall?"
               name="u_satisfaction"
               options={satisfactionOptions}
               value={formData.u_satisfaction}
               onChange={handleChange}
-              error={errors.u_satisfaction}
             />           
 
             <RadioGroup
-              label="3. Will you recommend this portal to your colleagues? *"
+              label="3. Will you recommend this portal to your colleagues?"
               name="u_recommendation"
               options={recommendOptions}
               value={formData.u_recommendation}
               onChange={handleChange}
-              error={errors.u_recommendation}
             />
 
             <RadioGroup
-              label="4. What is your most used feature? *"
+              label="4. What is your most used feature?"
               name="u_used_feature"
               options={featureOptions}
               value={formData.u_used_feature}
               onChange={handleChange}
-              error={errors.u_used_feature}
             />            
 
             <TextArea
-              label="5. Did you face any issues while using the portal? *"
+              label="5. Did you face any issues while using the portal?"
               name="u_issues_faced"
               value={formData.u_issues_faced}
               onChange={handleChange}
-              error={errors.u_issues_faced}
             />
 
             <TextArea
-              label="6. Do you have any suggestions to improve our portal features? *"
+              label="6. Do you have any suggestions to improve our portal features?"
               name="u_suggestions"
               value={formData.u_suggestions}
               onChange={handleChange}
-              error={errors.u_suggestions}
             />
 
             <div className="mb-3 text-start">
