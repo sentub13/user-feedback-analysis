@@ -72,15 +72,15 @@ public class FeedbackService {
 
         // Save sentiment analysis results
         SentimentAnalysis sentimentAnalysis = new SentimentAnalysis();
-        sentimentAnalysis.setFb_id(savedFeedback.getU_id());
+        sentimentAnalysis.setFb_id(savedFeedback.getId());
         sentimentAnalysis.setFb_frequency(sentiment1);
         sentimentAnalysis.setFb_satisfaction(sentiment2);
         sentimentAnalysis.setFb_recommendation(sentiment3);
         sentimentAnalysis.setFb_used_feature(sentiment4);
         sentimentAnalysis.setFb_issues_faced(sentiment5);
         sentimentAnalysis.setFb_suggestions(sentiment6);
+        sentimentAnalysis.setFb_created_at(savedFeedback.getCreated_at());
         sentimentAnalysisRepository.save(sentimentAnalysis);
-        // sentimentAnalysis.setFb_id(savedFeedback.getCreated_at());
         return savedFeedback;
     }
 

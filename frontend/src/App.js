@@ -12,9 +12,8 @@ function App() {
         <div className="container">
           <Link className="navbar-brand" to="/">FeedBack Analysis</Link>
           <div className="navbar-nav">
-            <Link className="nav-link" to="/">Home</Link>
-            <Link className="nav-link" to="/report">Report</Link>
-            <Link className="nav-link" to="/about">About</Link>            
+            <Link className="nav-link" to="/">Feedback</Link>
+            <Link className="nav-link" to="/report">Dasboard</Link>
           </div>
         </div>
       </nav>
@@ -23,7 +22,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/report" element={<Report />} />
-          <Route path="/about" element={<About />} />          
         </Routes>
       </div>
     </Router>

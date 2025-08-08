@@ -12,9 +12,9 @@ function Report() {
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
     startDate: '',
-    endDate: '', 
+    endDate: '',
     frequency: '',
-    satisfaction: '',
+    satisfaction: '', 
     recommendation: '',
     usedFeature: '',
     issuesFaced: '',
@@ -45,6 +45,18 @@ function Report() {
   const applyFilters = () => {
     let filtered = [...reportData];
     
+    if (filters.startDate) {
+      filtered = filtered.filter(item => 
+        new Date(item.fb_created_at) >= new Date(filters.startDate)
+      );
+    }
+    
+    if (filters.endDate) {
+      filtered = filtered.filter(item =>
+        new Date(item.fb_created_at) <= new Date(filters.endDate)
+      );
+    }
+
     if (filters.frequency) {
       filtered = filtered.filter(item => item.fb_frequency === filters.frequency);
     }
@@ -76,6 +88,8 @@ function Report() {
 
   const clearFilters = () => {
     setFilters({
+      startDate: '',
+      endDate: '',
       frequency: '',
       satisfaction: '',
       recommendation: '',
@@ -137,6 +151,26 @@ function Report() {
         </div>
         <div className="card-body">
           <div className="row">
+            <div className="col-md-2">
+              <label className="form-label">Start Date</label>
+              <input
+                type="date"
+                className="form-control"
+                name="startDate"
+                value={filters.startDate}
+                onChange={handleFilterChange}
+              />
+            </div>
+            <div className="col-md-2">
+              <label className="form-label">End Date</label>
+              <input
+                type="date"
+                className="form-control"
+                name="endDate"
+                value={filters.endDate}
+                onChange={handleFilterChange}
+              />
+            </div>
             <div className="col-md-2">
               <label className="form-label">Frequency</label>
               <select
@@ -217,52 +251,39 @@ function Report() {
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th>ID</th>
                         <th>Frequency</th>
                         <th>Satisfaction</th>
                         <th>Recommendation</th>
                         <th>Used Features</th>
                         <th>Issues Faced</th>
                         <th>Suggestions</th>
+                        <th>Overall Sentiment</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredData.length > 0 ? (
                         filteredData.map((item) => (
                           <tr key={item.id}>
-                            <td>{item.fb_id}</td>
-                            <td>
-                              <span className={`badge ${
-                                item.fb_frequency === 'Positive' ? 'bg-success' :
-                                item.fb_frequency === 'Neutral' ? 'bg-warning' : 'bg-danger'
-                              }`}>
-                                {item.fb_frequency}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={`badge ${
-                                item.fb_satisfaction === 'Positive' ? 'bg-success' :
-                                item.fb_satisfaction === 'Neutral' ? 'bg-warning' : 'bg-danger'
-                              }`}>
-                                {item.fb_satisfaction}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={`badge ${
-                                item.fb_recommendation === 'Positive' ? 'bg-success' :
-                                item.fb_recommendation === 'Neutral' ? 'bg-warning' : 'bg-danger'
-                              }`}>
-                                {item.fb_recommendation}
-                              </span>
-                            </td>
-                            <td>{item.fb_used_feature}</td>
-                            <td>{item.fb_issues_faced}</td>
-                            <td>{item.fb_suggestions}</td>
-                          </tr>
+                          <td>{item.fb_frequency}</td>
+                          <td>{item.fb_satisfaction}</td>
+                          <td>{item.fb_recommendation}</td>
+                          <td>{item.fb_used_feature}</td>
+                          <td>{item.fb_issues_faced}</td>
+                          <td>{item.fb_suggestions}</td>
+                          <td>
+                            <span className={`text-success ${
+                              item.fb_recommendation === 'Positive' ? 'text-success' :
+                              item.fb_recommendation === 'Neutral' ? 'text-warning' : 'text-danger'
+                            }`}>
+                              {item.fb_overall_summary}
+                            </span>
+                          </td>
+                        </tr>
+
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="7" className="text-center">No data available</td>
+                          <td colSpan="8" className="text-center">No data available</td>
                         </tr>
                       )}
                     </tbody>

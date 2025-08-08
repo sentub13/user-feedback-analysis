@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sentiment_analysis")
@@ -38,8 +39,11 @@ public class SentimentAnalysis {
     @Column(name = "fb_overall_summary", length = 500)
     private String fb_overall_summary;
 
+    @Column(name = "fb_created_at")
+    private LocalDateTime fb_created_at;
+
     public SentimentAnalysis(){}
-    public SentimentAnalysis(Long id, Long fb_id, String fb_frequency, String fb_satisfaction, String fb_recommendation, String fb_used_feature, String fb_issues_faced, String fb_suggestions, String fb_overall_summary) {
+    public SentimentAnalysis(Long id, Long fb_id, String fb_frequency, String fb_satisfaction, String fb_recommendation, String fb_used_feature, String fb_issues_faced, String fb_suggestions, String fb_overall_summary, LocalDateTime fb_created_at) {
         this.id = id;
         this.fb_id = fb_id;
         this.fb_frequency = fb_frequency;
@@ -49,6 +53,7 @@ public class SentimentAnalysis {
         this.fb_issues_faced = fb_issues_faced;
         this.fb_suggestions = fb_suggestions;
         this.fb_overall_summary = fb_overall_summary;
+        this.fb_created_at = fb_created_at;
     }
 
     // Getters and setters
@@ -70,4 +75,6 @@ public class SentimentAnalysis {
     public void setFb_suggestions(String fb_suggestions) { this.fb_suggestions = fb_suggestions;  }
     public String getFb_overall_summary() { return fb_overall_summary; }
     public void setFb_overall_summary(String fb_overall_summary) {this.fb_overall_summary = fb_overall_summary; }
+    public LocalDateTime getFb_created_at() { return fb_created_at; }
+    public void setFb_created_at(LocalDateTime fb_created_at) { this.fb_created_at = fb_created_at; }
 }
