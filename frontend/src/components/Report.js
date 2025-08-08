@@ -282,10 +282,10 @@ function Report() {
                           <td>{item.fb_issues_faced}</td>
                           <td>{item.fb_suggestions}</td>
                           <td>
-                          <span className={`${
-                            item.fb_overall_summary === 'Positive' ? 'text-success' :
-                            item.fb_overall_summary === 'Neutral' ? 'text-warning' : 'text-danger'
-                          }`}>
+                          <span className={`badge ${
+                            item.fb_overall_summary === 'Positive' ? 'text-bg-success text-light' :
+                            item.fb_overall_summary === 'Neutral' ? 'text-bg-warning text-light' : 'text-bg-danger text-light'
+                          }`} style={{width: '65px'}}>
                             {item.fb_overall_summary}
                           </span>
                         </td>
