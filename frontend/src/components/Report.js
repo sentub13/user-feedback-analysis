@@ -111,7 +111,7 @@ function Report() {
     labels: ['Positive', 'Neutral', 'Negative'],
     datasets: [
       {
-        data: Object.values(getDistribution('fb_recommendation')),
+        data: Object.values(getDistribution('fb_overall_summary')),
         backgroundColor: [
           '#4BC0C0',
           '#FFCD56', 
@@ -133,8 +133,19 @@ function Report() {
           label: (context) => {
             const total = context.dataset.data.reduce((a, b) => a + b, 0);
             const percentage = ((context.parsed / total) * 100).toFixed(1);
-            return `${context.label}: ${context.parsed} (${percentage}%)`;
+            return `${context.label}: ${percentage}%`;
           }
+        }
+      },
+      datalabels: {
+        formatter: (value, ctx) => {
+          const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+          const percentage = ((value / total) * 100).toFixed(1);
+          return `${percentage}%`;
+        },
+        color: '#fff',
+        font: {
+          weight: 'bold'
         }
       }
     }
@@ -271,13 +282,13 @@ function Report() {
                           <td>{item.fb_issues_faced}</td>
                           <td>{item.fb_suggestions}</td>
                           <td>
-                            <span className={`text-success ${
-                              item.fb_recommendation === 'Positive' ? 'text-success' :
-                              item.fb_recommendation === 'Neutral' ? 'text-warning' : 'text-danger'
-                            }`}>
-                              {item.fb_overall_summary}
-                            </span>
-                          </td>
+                          <span className={`${
+                            item.fb_overall_summary === 'Positive' ? 'text-success' :
+                            item.fb_overall_summary === 'Neutral' ? 'text-warning' : 'text-danger'
+                          }`}>
+                            {item.fb_overall_summary}
+                          </span>
+                        </td>
                         </tr>
                         ))
                       ) : (
@@ -296,7 +307,7 @@ function Report() {
           <div className="col-md-4">
             <div className="card">
               <div className="card-header title2">
-                <h6 className="mb-0">Recommendation Distribution</h6>
+                <h6 className="mb-0">Overall Sentiment Distribution</h6>
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
