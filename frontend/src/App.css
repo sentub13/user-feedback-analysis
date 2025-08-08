@@ -32,6 +32,10 @@ input[type="radio"]:checked {
 .title {
   color: #2193b0;
 }
+.reload {
+  float: right;
+  cursor: pointer;
+}
 .title2 {
   color: #fff;
   background: #2193b0;
@@ -63,5 +67,4 @@ input[type="radio"]:checked {
   border-radius: 15px;
   border: 2px solid #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
 }

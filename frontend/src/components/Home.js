@@ -59,6 +59,11 @@ function Home() {
     }
   };
 
+  const handleReset = () => {
+    setFormData(initialFormState);
+    setErrors({});
+  };
+
   const frequencyOptions = [
     { value: 'Daily', label: 'Daily' },
     { value: 'Weekly', label: 'Weekly' },
@@ -92,7 +97,10 @@ function Home() {
     <div className="row formAreaBg">
       <div className="col-md-8 offset-md-2">
         <div className='formarea'>
-          <h5 className='title'>Customer Feedback Survey</h5>
+        <h5 className='title'>
+          <span>Customer Feedback Survey</span>
+          <i className="fas fa-redo reload" onClick={handleReset} title="Refresh form"></i>
+        </h5>
           <div className='text-secondary'> <small>This is sample customer feedback form for TICL project </small> </div>
           <div className='mb-3 text-secondary'> <small>Hi, Sentu. When you submit this form, the owner will see your name and email address.</small> </div>
           
@@ -186,7 +194,7 @@ function Home() {
             />
 
             <div className="mb-3 text-start">
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <button type="submit" className="btn btn-primary me-2">Submit</button>
             </div>
           </form>
         </div>
