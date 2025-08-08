@@ -142,12 +142,12 @@ function Report() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Feedback Report</h2>
+      <h5 className='mb-4 title'>Dashboard Report</h5>
       
       {/* Filter Section */}
       <div className="card mb-4">
         <div className="card-header title2">
-          <h5 className="mb-0">Filters</h5>
+          <h6 className="mb-0">Filters</h6>
         </div>
         <div className="card-body">
           <div className="row">
@@ -244,7 +244,7 @@ function Report() {
           <div className="col-md-8">
             <div className="card">
               <div className="card-header title2">
-                <h5 className="mb-0 ">Feedback Data ({filteredData.length} records)</h5>
+                <h6 className="mb-0 ">Feedback Data ({filteredData.length} records)</h6>
               </div>
               <div className="card-body">
                 <div className="table-responsive">
@@ -279,7 +279,6 @@ function Report() {
                             </span>
                           </td>
                         </tr>
-
                         ))
                       ) : (
                         <tr>
@@ -297,7 +296,7 @@ function Report() {
           <div className="col-md-4">
             <div className="card">
               <div className="card-header title2">
-                <h5 className="mb-0">Recommendation Distribution</h5>
+                <h6 className="mb-0">Recommendation Distribution</h6>
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
