@@ -59,6 +59,7 @@ function Home() {
         await submitFeedback(formData);
         alert('Feedback submitted successfully!');
         setFormData(initialFormState);
+        handleReset();
       } catch (error) {
         console.error('Feedback submission error:', error);
         const errorMessage = error.message.includes('Network error') 

@@ -15,7 +15,7 @@ function Report() {
     endDate: '',
     frequency: '',
     satisfaction: '', 
-    recommendation: '',
+    overallSummary: '',
     usedFeature: '',
     issuesFaced: '',
     suggestions: ''
@@ -63,8 +63,8 @@ function Report() {
     if (filters.satisfaction) {
       filtered = filtered.filter(item => item.fb_satisfaction === filters.satisfaction);
     }
-    if (filters.recommendation) {
-      filtered = filtered.filter(item => item.fb_recommendation === filters.recommendation);
+    if (filters.overallSummary) {
+      filtered = filtered.filter(item => item.fb_overall_summary === filters.overallSummary);
     }
     if (filters.usedFeature) {
       filtered = filtered.filter(item => item.fb_used_feature === filters.usedFeature);
@@ -92,7 +92,7 @@ function Report() {
       endDate: '',
       frequency: '',
       satisfaction: '',
-      recommendation: '',
+      overallSummary: '',
       usedFeature: '',
       issuesFaced: '',
       suggestions: ''
@@ -211,11 +211,11 @@ function Report() {
               </select>
             </div>
             <div className="col-md-2">
-              <label className="form-label">Recommendation</label>
+              <label className="form-label">Overall Summary</label>
               <select
                 className="form-select"
-                name="recommendation"
-                value={filters.recommendation}
+                name="overallSummary"
+                value={filters.overallSummary}
                 onChange={handleFilterChange}
               >
                 <option value="">All</option>
