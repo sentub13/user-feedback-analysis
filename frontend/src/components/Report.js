@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { getSentimentAnalysis } from '../services/reportService';
@@ -153,7 +154,11 @@ function Report() {
 
   return (
     <div className="container mt-4">
-      <h5 className='mb-4 title'>Dashboard Report</h5>
+      <h5 className='title'>
+          <span>Dashboard Report </span>
+          {/* <Link className="navbar-brand" to="/report"><i className="fas fa-chart-bar reload me-3" title="View Reports"></i></Link> */}
+          <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link>
+        </h5>
       
       {/* Filter Section */}
       <div className="card mb-4">

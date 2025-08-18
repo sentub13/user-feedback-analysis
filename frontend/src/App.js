@@ -8,7 +8,7 @@ import About from './components/About';
 function App() {
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      {/* <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
           <Link className="navbar-brand" to="/">FeedBack Analysis</Link>
           <div className="navbar-nav">
@@ -16,7 +16,7 @@ function App() {
             <Link className="nav-link" to="/report">Dasboard</Link>
           </div>
         </div>
-      </nav>
+      </nav> */}
       
       <div className="container-fluid">
         <Routes>
