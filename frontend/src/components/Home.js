@@ -4,8 +4,7 @@ import { submitFeedback } from '../services/feedbackService';
 import { FormInput, RadioGroup, TextArea } from './FormComponents';
 
 const initialFormState = {
-  u_fname: '',
-  u_lastname: '',
+  u_name: '',
   u_id: '',
   u_email: '',
   u_frequency: '',  
@@ -14,6 +13,7 @@ const initialFormState = {
   u_used_feature: '',
   u_issues_faced: '',
   u_suggestions: '',
+  u_feedback_for: ''
 };
 
 function Home() {
@@ -30,8 +30,7 @@ function Home() {
   const validate = () => {
     const newErrors = {};
     // Mandatory fields validation
-    if (!formData.u_fname) newErrors.u_fname = 'This field is required';
-    if (!formData.u_lastname) newErrors.u_lastname = 'This field is required';
+    if (!formData.u_name) newErrors.u_name = 'This field is required';
     if (!formData.u_id) newErrors.u_id = 'This field is required';
     if (!formData.u_email) newErrors.u_email = 'This field is required';
 
@@ -113,35 +112,42 @@ function Home() {
     <div className="row formAreaBg">
       <div className="col-md-8 offset-md-2">
         <div className='formarea'>
-        <h5 className='title'>
+        <h5 className='title d-flex justify-content-between align-items-center'>
           <span>Customer Feedback Survey </span>
-          <Link className="navbar-brand" to="/report"><i className="fas fa-chart-bar reload me-3" title="View Reports"></i></Link>
-          {/* <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link> */}
+
+          <div className="d-flex align-items-center">
+              <div className="navbar-brand">
+                <select
+                  className="form-select"
+                  name="u_feedback_for"
+                  value={formData.u_feedback_for}
+                  onChange={handleChange}
+                >
+                  <option value="">Survey for</option>
+                  <option value="IJP">IJP</option>
+                  <option value="Wordday">Wordday</option>
+                  <option value="Service Now">Service Now</option>
+                </select>
+              </div>
+              <Link className="navbar-brand ms-2" to="/report"><i className="fas fa-chart-bar reload me-3" title="View Reports"></i></Link>
+              {/* <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link> */}
+          </div>
         </h5>
           <div className='text-secondary'> <small>This is sample customer feedback form for TICL project </small> </div>
           <div className='mb-3 text-secondary'> <small>Hi, Sentu. When you submit this form, the owner will see your name and email address.</small> </div>
           
           <form onSubmit={handleSubmit}>
             <FormInput
-              label="Please enter your first name : *"
-              name="u_fname"
-              value={formData.u_fname}
+              label="Please enter your name : *"
+              name="u_name"
+              value={formData.u_name}
               onChange={handleChange}
               style={{width: '200px'}}
-              error={errors.u_fname}
+              error={errors.u_name}
             />
 
             <FormInput
-              label="Please enter your last name : *"
-              name="u_lastname"
-              value={formData.u_lastname}
-              onChange={handleChange}
-              style={{width: '200px'}}
-              error={errors.u_lastname}
-            />
-
-            <FormInput
-              label="Please enter your User Id : *"
+              label="Please enter your user Id : *"
               name="u_id"
               value={formData.u_id}
               onChange={handleChange}
@@ -151,7 +157,7 @@ function Home() {
             />
 
             <FormInput
-              label="Please enter your Email : *"
+              label="Please enter your email : *"
               name="u_email"
               type="email"
               value={formData.u_email}

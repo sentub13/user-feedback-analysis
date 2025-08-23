@@ -10,11 +10,11 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "u_fname", length = 100)
-    private String u_fname;
+    @Column(name = "u_feedback_for", length = 100)
+    private String u_feedback_for;
 
-    @Column(name = "u_lastname", length = 100)
-    private  String u_lastname;
+    @Column(name = "U_name", length = 100)
+    private String U_name;
 
     @Column(name = "u_id", length = 15)
     private Long u_id;
@@ -46,9 +46,9 @@ public class Feedback {
     public Feedback() {
 		this.created_at = LocalDateTime.now();
 	}
-    public Feedback(String u_fname, String u_lastname, Long u_id, String u_email, String u_frequency, String u_satisfaction, Boolean u_recommendation, String u_used_feature, String u_issues_faced, String u_suggestions) {
-        this.u_fname = u_fname;
-        this.u_lastname = u_lastname;
+    public Feedback(String u_feedback_for, String U_name, Long u_id, String u_email, String u_frequency, String u_satisfaction, Boolean u_recommendation, String u_used_feature, String u_issues_faced, String u_suggestions) {
+        this.u_feedback_for = u_feedback_for;
+        this.U_name = U_name;
         this.u_id = u_id;
         this.u_email = u_email;
         this.u_frequency = u_frequency;        
@@ -61,15 +61,14 @@ public class Feedback {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public String getU_fname() { return u_fname; }
-    public void setU_fname(String u_fname) { this.u_fname = u_fname; }
-    public String getU_lastname() { return u_lastname; }
-    public void setU_lastname(String u_lastname) { this.u_lastname = u_lastname; }
+    public String getU_feedback_for() { return u_feedback_for; }
+    public void setU_feedback_for(String u_feedback_for) { this.u_feedback_for = u_feedback_for; }
+    public String getU_name() { return U_name; }
+    public void setU_name(String U_name) { this.U_name = U_name; }
     public Long getU_id() { return u_id; }
     public void setU_id(Long u_id) { this.u_id = u_id; }
     public String getU_email() { return u_email; }
     public void setU_email(String u_email) { this.u_email = u_email; }
-
     public String getU_frequency() { return u_frequency; }
     public void setU_frequency(String u_frequency) { this.u_frequency = u_frequency; }
     public String getU_satisfaction() { return u_satisfaction; }
@@ -84,7 +83,6 @@ public class Feedback {
     public void setU_suggestions(String u_suggestions) { this.u_suggestions = u_suggestions; }    
     public LocalDateTime getCreated_at() { return created_at; }
     public void setCreated_at(LocalDateTime created_at) { this.created_at = created_at; }
-
 
 }
 

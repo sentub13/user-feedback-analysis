@@ -14,7 +14,7 @@ function Report() {
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
-    frequency: '',
+    group: '',
     satisfaction: '', 
     overallSummary: '',
     usedFeature: '',
@@ -58,8 +58,8 @@ function Report() {
       );
     }
 
-    if (filters.frequency) {
-      filtered = filtered.filter(item => item.fb_frequency === filters.frequency);
+    if (filters.group) {
+      filtered = filtered.filter(item => item.fb_group === filters.group);
     }
     if (filters.satisfaction) {
       filtered = filtered.filter(item => item.fb_satisfaction === filters.satisfaction);
@@ -91,7 +91,7 @@ function Report() {
     setFilters({
       startDate: '',
       endDate: '',
-      frequency: '',
+      group: '',
       satisfaction: '',
       overallSummary: '',
       usedFeature: '',
@@ -188,33 +188,19 @@ function Report() {
               />
             </div>
             <div className="col-md-2">
-              <label className="form-label">Frequency</label>
-              <select
-                className="form-select"
-                name="frequency"
-                value={filters.frequency}
-                onChange={handleFilterChange}
-              >
-                <option value="">All</option>
-                <option value="Positive">Positive</option>
-                <option value="Neutral">Neutral</option>
-                <option value="Negative">Negative</option>
-              </select>
-            </div>
-            <div className="col-md-2">
-              <label className="form-label">Satisfaction</label>
-              <select
-                className="form-select"
-                name="satisfaction"
-                value={filters.satisfaction}
-                onChange={handleFilterChange}
-              >
-                <option value="">All</option>
-                <option value="Positive">Positive</option>
-                <option value="Neutral">Neutral</option>
-                <option value="Negative">Negative</option>
-              </select>
-            </div>
+            <label className="form-label">Group</label>
+            <select
+              className="form-select"
+              name="group"
+              value={filters.group}
+              onChange={handleFilterChange}
+            >
+              <option value="">All</option>
+              <option value="IJP">IJP</option>
+              <option value="Wordday">Wordday</option>
+              <option value="Service Now">Service Now</option>
+            </select>
+          </div>
             <div className="col-md-2">
               <label className="form-label">Overall Summary</label>
               <select
@@ -229,10 +215,10 @@ function Report() {
                 <option value="Negative">Negative</option>
               </select>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-2 offset-md-2">
               <button
                 type="button"
-                className="btn btn-secondary mt-4"
+                className="btn btn-secondary mt-4 float-end"
                 onClick={clearFilters}
               >
                 Clear Filters
@@ -255,6 +241,7 @@ function Report() {
           </div>
         </div>
       ) : (
+        <>
         <div className="row">
           {/* Data Table */}
           <div className="col-md-8">
@@ -312,7 +299,7 @@ function Report() {
           <div className="col-md-4">
             <div className="card">
               <div className="card-header title2">
-                <h6 className="mb-0">Overall Sentiment Distribution</h6>
+                <h6 className="mb-0">Overall Summary</h6>
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
@@ -326,6 +313,45 @@ function Report() {
             </div>
           </div>
         </div>
+        <div className="row my-4">
+          {/* Data Table */}
+          
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-header title2">
+                <h6 className="mb-0"> Sumary - {filters.group}</h6>
+              </div>
+              <div className="card-body">
+                {filteredData.length > 0 ? (
+                  <Bar data={pieChartData} options={pieChartOptions} />
+                ) : (
+                  <div className="text-center text-muted">
+                    <p>No data to display</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Pie Chart */}
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-header title2">
+                <h6 className="mb-0">Trends - {filters.group}</h6>
+              </div>
+              <div className="card-body">
+                {filteredData.length > 0 ? (
+                  <Pie data={pieChartData} options={pieChartOptions} />
+                ) : (
+                  <div className="text-center text-muted">
+                    <p>No data to display</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        </>        
       )}
     </div>
   );
