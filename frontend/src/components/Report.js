@@ -35,7 +35,7 @@ function Report() {
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
-    group: '',
+    u_feedback_for: '',
     satisfaction: '',
     overallSummary: '',
     usedFeature: '',
@@ -79,8 +79,8 @@ function Report() {
       );
     }
 
-    if (filters.group) {
-      filtered = filtered.filter(item => item.fb_group === filters.group);
+    if (filters.u_feedback_for) {
+      filtered = filtered.filter(item => item.u_feedback_for === filters.u_feedback_for);
     }
     if (filters.satisfaction) {
       filtered = filtered.filter(item => item.fb_satisfaction === filters.satisfaction);
@@ -112,7 +112,7 @@ function Report() {
     setFilters({
       startDate: '',
       endDate: '',
-      group: '',
+      u_feedback_for: '',
       satisfaction: '',
       overallSummary: '',
       usedFeature: '',
@@ -210,8 +210,8 @@ function Report() {
             <label className="form-label">Group</label>
             <select
               className="form-select"
-              name="group"
-              value={filters.group}
+              name="u_feedback_for"
+              value={filters.u_feedback_for}
               onChange={handleFilterChange}
             >
               <option value="">All</option>
@@ -260,8 +260,122 @@ function Report() {
           </div>
         </div>
       ) : (
-        <>
+        <>        
         <div className="row">
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-header title2">
+                <h6 className="mb-0"> Summary - {filters.u_feedback_for || 'All Groups'}</h6>
+              </div>
+              <div className="card-body">
+                {filteredData.length > 0 ? (
+                  <Bar
+                    data={{
+                      labels: ['Positive', 'Neutral', 'Negative'],
+                      datasets: [
+                        {
+                          data: Object.values(getDistribution('fb_overall_summary')),
+                          backgroundColor: [
+                            '#4BC0C0',
+                            '#FFCD56',
+                            '#FF6384'
+                          ],
+                          borderWidth: 1
+                        }
+                      ]
+                    }}
+                    options={{
+                      indexAxis: 'y',
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          display: false
+                        },
+                        tooltip: {
+                          callbacks: {
+                            label: (context) => {
+                              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                              const percentage = ((context.parsed.x / total) * 100).toFixed(1);
+                              return `${context.label}: ${percentage}%`;
+                            }
+                          }
+                        }
+                      },
+                      scales: {
+                        x: {
+                          beginAtZero: true
+                        }
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="text-center text-muted">
+                    <p>No data to display</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-header title2">
+                <h6 className="mb-0">Trends - {filters.u_feedback_for || 'All Groups'}</h6>
+              </div>
+              <div className="card-body">
+                {filteredData.length > 0 ? (
+                  <Line
+                    data={{
+                      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                      datasets: [
+                        {
+                          label: 'Positive',
+                          data: [12, 19, 3, 5, 2, 3],
+                          borderColor: '#4BC0C0',
+                          backgroundColor: '#4BC0C0',
+                          tension: 0.1
+                        },
+                        {
+                          label: 'Neutral',
+                          data: [2, 3, 20, 5, 1, 4],
+                          borderColor: '#FFCD56',
+                          backgroundColor: '#FFCD56',
+                          tension: 0.1
+                        },
+                        {
+                          label: 'Negative',
+                          data: [3, 10, 13, 15, 22, 30],
+                          borderColor: '#FF6384',
+                          backgroundColor: '#FF6384',
+                          tension: 0.1
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: 'bottom'
+                        }
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="text-center text-muted">
+                    <p>No data to display</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row my-4">
           <div className="col-md-8">
             <div className="card">
               <div className="card-header title2">
@@ -326,121 +440,8 @@ function Report() {
                     <p>No data to display</p>
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row my-4">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header title2">
-                <h6 className="mb-0"> Summary - {filters.group || 'All Groups'}</h6>
-              </div>
-              <div className="card-body">
-                {filteredData.length > 0 ? (
-                  <Bar
-                    data={{
-                      labels: ['Positive', 'Neutral', 'Negative'],
-                      datasets: [
-                        {
-                          data: Object.values(getDistribution('fb_overall_summary')),
-                          backgroundColor: [
-                            '#4BC0C0',
-                            '#FFCD56',
-                            '#FF6384'
-                          ],
-                          borderWidth: 1
-                        }
-                      ]
-                    }}
-                    options={{
-                      indexAxis: 'y',
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          display: false
-                        },
-                        tooltip: {
-                          callbacks: {
-                            label: (context) => {
-                              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                              const percentage = ((context.parsed.x / total) * 100).toFixed(1);
-                              return `${context.label}: ${percentage}%`;
-                            }
-                          }
-                        }
-                      },
-                      scales: {
-                        x: {
-                          beginAtZero: true
-                        }
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className="text-center text-muted">
-                    <p>No data to display</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+              </div>  
 
-
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header title2">
-                <h6 className="mb-0">Trends - {filters.group || 'All Groups'}</h6>
-              </div>
-              <div className="card-body">
-                {filteredData.length > 0 ? (
-                  <Line
-                    data={{
-                      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                      datasets: [
-                        {
-                          label: 'Positive',
-                          data: [12, 19, 3, 5, 2, 3],
-                          borderColor: '#4BC0C0',
-                          backgroundColor: '#4BC0C0',
-                          tension: 0.1
-                        },
-                        {
-                          label: 'Neutral',
-                          data: [2, 3, 20, 5, 1, 4],
-                          borderColor: '#FFCD56',
-                          backgroundColor: '#FFCD56',
-                          tension: 0.1
-                        },
-                        {
-                          label: 'Negative',
-                          data: [3, 10, 13, 15, 22, 30],
-                          borderColor: '#FF6384',
-                          backgroundColor: '#FF6384',
-                          tension: 0.1
-                        }
-                      ]
-                    }}
-                    options={{
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          position: 'bottom'
-                        }
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: true
-                        }
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className="text-center text-muted">
-                    <p>No data to display</p>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>
