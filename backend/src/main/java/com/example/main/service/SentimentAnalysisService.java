@@ -26,27 +26,56 @@ public class SentimentAnalysisService {
         this.pipeline = new StanfordCoreNLP(props);
     }
 
-    public List<SentimentResponse> analyzeSentiment(String text) {
-        List<SentimentResponse> results = new ArrayList<>();
-
-        // Create an annotation object
+    // Remove the manual scoring method and use Stanford CoreNLP for sentiment analysis
+    public String analyzeSurveyResponse(String text) {
         Annotation annotation = new Annotation(text);
         pipeline.annotate(annotation);
-
-        // Process each sentence
         List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+        if (sentences == null || sentences.isEmpty()) return "neutral";
+        int totalScore = 0;
         for (CoreMap sentence : sentences) {
             String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            SentimentResponse response = new SentimentResponse();
-            response.setSentence(sentence.toString());
-            response.setSentiment(sentiment);
-            results.add(response);
+            int score = mapStanfordSentimentToScore(sentiment);
+            totalScore += score;
         }
+        double avgScore = (double) totalScore / sentences.size();
+        if (avgScore >= 3.0) return "Positive";
+        if (avgScore <= 1.5) return "Negative";
+        return "neutral";
+    }
 
+    private int mapStanfordSentimentToScore(String sentiment) {
+        switch (sentiment) {
+            case "Very Positive": return 4;
+            case "Positive": return 3;
+            case "neutral": return 2;
+            case "Negative": return 1;
+            case "Very Negative": return 0;
+            default: return 2;
+        }
+    }
+
+    // Returns a list of SentimentResponse for the given text
+    public List<SentimentResponse> analyzeSentiment(String text) {
+        List<SentimentResponse> results = new ArrayList<>();
+        Annotation annotation = new Annotation(text);
+        pipeline.annotate(annotation);
+        List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+        if (sentences != null) {
+            for (CoreMap sentence : sentences) {
+                String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
+                SentimentResponse response = new SentimentResponse();
+                response.setSentence(sentence.toString());
+                response.setSentiment(sentiment);
+                results.add(response);
+            }
+        }
         return results;
     }
 
+    // Returns all SentimentAnalysis records from the repository
     public List<SentimentAnalysis> getAllSentimentAnalysis() {
         return sentimentAnalysisRepository.findAll();
     }
+
 }

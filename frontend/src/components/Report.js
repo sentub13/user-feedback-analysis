@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Link } from 'react-router-dom';
+import { Pie, Line, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
 import { getSentimentAnalysis } from '../services/reportService';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement, 
+  LineElement,
+  ArcElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function Report() {
   const [reportData, setReportData] = useState([]);
@@ -15,7 +36,7 @@ function Report() {
     startDate: '',
     endDate: '',
     group: '',
-    satisfaction: '', 
+    satisfaction: '',
     overallSummary: '',
     usedFeature: '',
     issuesFaced: '',
@@ -115,7 +136,7 @@ function Report() {
         data: Object.values(getDistribution('fb_overall_summary')),
         backgroundColor: [
           '#4BC0C0',
-          '#FFCD56', 
+          '#FFCD56',
           '#FF6384'
         ],
         borderWidth: 1
@@ -156,11 +177,9 @@ function Report() {
     <div className="container mt-4">
       <h5 className='title'>
           <span>Dashboard Report </span>
-          {/* <Link className="navbar-brand" to="/report"><i className="fas fa-chart-bar reload me-3" title="View Reports"></i></Link> */}
           <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link>
-        </h5>
+      </h5>
       
-      {/* Filter Section */}
       <div className="card mb-4">
         <div className="card-header title2">
           <h6 className="mb-0">Filters</h6>
@@ -243,7 +262,6 @@ function Report() {
       ) : (
         <>
         <div className="row">
-          {/* Data Table */}
           <div className="col-md-8">
             <div className="card">
               <div className="card-header title2">
@@ -295,7 +313,6 @@ function Report() {
             </div>
           </div>
 
-          {/* Pie Chart */}
           <div className="col-md-4">
             <div className="card">
               <div className="card-header title2">
@@ -314,16 +331,52 @@ function Report() {
           </div>
         </div>
         <div className="row my-4">
-          {/* Data Table */}
-          
           <div className="col-md-6">
             <div className="card">
               <div className="card-header title2">
-                <h6 className="mb-0"> Sumary - {filters.group}</h6>
+                <h6 className="mb-0"> Summary - {filters.group || 'All Groups'}</h6>
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
-                  <Bar data={pieChartData} options={pieChartOptions} />
+                  <Bar
+                    data={{
+                      labels: ['Positive', 'Neutral', 'Negative'],
+                      datasets: [
+                        {
+                          data: Object.values(getDistribution('fb_overall_summary')),
+                          backgroundColor: [
+                            '#4BC0C0',
+                            '#FFCD56',
+                            '#FF6384'
+                          ],
+                          borderWidth: 1
+                        }
+                      ]
+                    }}
+                    options={{
+                      indexAxis: 'y',
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          display: false
+                        },
+                        tooltip: {
+                          callbacks: {
+                            label: (context) => {
+                              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                              const percentage = ((context.parsed.x / total) * 100).toFixed(1);
+                              return `${context.label}: ${percentage}%`;
+                            }
+                          }
+                        }
+                      },
+                      scales: {
+                        x: {
+                          beginAtZero: true
+                        }
+                      }
+                    }}
+                  />
                 ) : (
                   <div className="text-center text-muted">
                     <p>No data to display</p>
@@ -333,15 +386,55 @@ function Report() {
             </div>
           </div>
 
-          {/* Pie Chart */}
+
           <div className="col-md-6">
             <div className="card">
               <div className="card-header title2">
-                <h6 className="mb-0">Trends - {filters.group}</h6>
+                <h6 className="mb-0">Trends - {filters.group || 'All Groups'}</h6>
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
-                  <Pie data={pieChartData} options={pieChartOptions} />
+                  <Line
+                    data={{
+                      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                      datasets: [
+                        {
+                          label: 'Positive',
+                          data: [12, 19, 3, 5, 2, 3],
+                          borderColor: '#4BC0C0',
+                          backgroundColor: '#4BC0C0',
+                          tension: 0.1
+                        },
+                        {
+                          label: 'Neutral',
+                          data: [2, 3, 20, 5, 1, 4],
+                          borderColor: '#FFCD56',
+                          backgroundColor: '#FFCD56',
+                          tension: 0.1
+                        },
+                        {
+                          label: 'Negative',
+                          data: [3, 10, 13, 15, 22, 30],
+                          borderColor: '#FF6384',
+                          backgroundColor: '#FF6384',
+                          tension: 0.1
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: 'bottom'
+                        }
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }}
+                  />
                 ) : (
                   <div className="text-center text-muted">
                     <p>No data to display</p>

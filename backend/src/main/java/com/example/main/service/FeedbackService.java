@@ -25,54 +25,20 @@ public class FeedbackService {
 
     public Feedback saveFeedback(Feedback feedback) {
         Feedback savedFeedback = feedbackRepository.save(feedback);
-        // Prepare texts for each question
-        String frequency = savedFeedback.getU_frequency() != null ? savedFeedback.getU_frequency() : "";
-        String text1 = "I use the portal on a " + frequency;
 
-        String satisfaction = savedFeedback.getU_satisfaction() != null ? savedFeedback.getU_satisfaction() : "";
-        String text2 = "I find all the features of this portal " + satisfaction;
-
-        Boolean recommendation = savedFeedback.getU_recommendation() != null ? savedFeedback.getU_recommendation() : false;
-        String text3 = recommendation + ", I would definitely recommend this portal to my colleagues";
-
-        String used_feature = savedFeedback.getU_used_feature() != null ? savedFeedback.getU_used_feature() : "";
-        String text4 = "The current "+used_feature+" features are comprehensive and helpful for my needs.";
-
-        String text5 = savedFeedback.getU_issues_faced() != null ? savedFeedback.getU_issues_faced() : "";
-        String text6 = savedFeedback.getU_suggestions() != null ? savedFeedback.getU_suggestions() : "";
-
-        // Analyze sentiment for each question using the injected SentimentAnalysisService instance
-        String sentiment1 = null, sentiment2 = null, sentiment3 = null, sentiment4 = null, sentiment5 = null, sentiment6 = null;
-        List<SentimentResponse> responses;
-
-        responses = sentimentAnalysisService.analyzeSentiment(text1);
-        if (!responses.isEmpty() && responses.get(0).getSentiment() != null) {
-            sentiment1 = responses.get(0).getSentiment();
-        }
-        responses = sentimentAnalysisService.analyzeSentiment(text2);
-        if (!responses.isEmpty() && responses.get(0).getSentiment() != null) {
-            sentiment2 = responses.get(0).getSentiment();
-        }
-        responses = sentimentAnalysisService.analyzeSentiment(text3);
-        if (!responses.isEmpty() && responses.get(0).getSentiment() != null) {
-            sentiment3 = responses.get(0).getSentiment();
-        }
-        responses = sentimentAnalysisService.analyzeSentiment(text4);
-        if (!responses.isEmpty() && responses.get(0).getSentiment() != null) {
-            sentiment4 = responses.get(0).getSentiment();
-        }
-        responses = sentimentAnalysisService.analyzeSentiment(text5);
-        if (!responses.isEmpty() && responses.get(0).getSentiment() != null) {
-            sentiment5 = responses.get(0).getSentiment();
-        }
-        responses = sentimentAnalysisService.analyzeSentiment(text6);
-        if (!responses.isEmpty() && responses.get(0).getSentiment() != null) {
-            sentiment6 = responses.get(0).getSentiment();
-        }
+        // Map structured answers directly to sentiment
+        String sentiment1 = mapFrequencyToSentiment(savedFeedback.getU_frequency());
+        String sentiment2 = mapSatisfactionToSentiment(savedFeedback.getU_satisfaction());
+        String sentiment3 = mapRecommendationToSentiment(savedFeedback.getU_recommendation());
+        // Use NLP for open text fields
+        String sentiment4 = sentimentAnalysisService.analyzeSurveyResponse(savedFeedback.getU_used_feature());
+        String sentiment5 = sentimentAnalysisService.analyzeSurveyResponse(savedFeedback.getU_issues_faced());
+        String sentiment6 = sentimentAnalysisService.analyzeSurveyResponse(savedFeedback.getU_suggestions());
 
         // Save sentiment analysis results
         SentimentAnalysis sentimentAnalysis = new SentimentAnalysis();
         sentimentAnalysis.setFb_id(savedFeedback.getId());
+        sentimentAnalysis.setU_feedback_for(savedFeedback.getU_feedback_for());
         sentimentAnalysis.setFb_frequency(sentiment1);
         sentimentAnalysis.setFb_satisfaction(sentiment2);
         sentimentAnalysis.setFb_recommendation(sentiment3);
@@ -80,6 +46,9 @@ public class FeedbackService {
         sentimentAnalysis.setFb_issues_faced(sentiment5);
         sentimentAnalysis.setFb_suggestions(sentiment6);
         sentimentAnalysis.setFb_created_at(savedFeedback.getCreated_at());
+        // Calculate overall sentiment from all six sentiment values
+        String overallSentiment = calculateOverallSentiment(sentiment1, sentiment2, sentiment3, sentiment4, sentiment5, sentiment6);
+        sentimentAnalysis.setFb_overall_summary(overallSentiment);
         sentimentAnalysisRepository.save(sentimentAnalysis);
         return savedFeedback;
     }
@@ -100,5 +69,54 @@ public class FeedbackService {
 
     public void deleteFeedback(Long id) {
         feedbackRepository.deleteById(id);
+    }
+
+    // Add mapping methods for structured fields
+    private String mapFrequencyToSentiment(String frequency) {
+        if (frequency == null) return "neutral";
+        switch (frequency.trim().toLowerCase()) {
+            case "never": return "Negative";
+            case "rarely": return "Negative";
+            case "monthly": return "neutral";
+            case "weekly": return "Positive";
+            case "daily": return "Positive";
+            default: return "neutral";
+        }
+    }
+    private String mapSatisfactionToSentiment(String satisfaction) {
+        if (satisfaction == null) return "neutral";
+        switch (satisfaction.trim().toLowerCase()) {
+            case "very unsatisfied": return "Negative";
+            case "unsatisfied": return "Negative";
+            case "undecided": return "neutral";
+            case "satisfied": return "Positive";
+            case "very satisfied": return "Positive";
+            default: return "neutral";
+        }
+    }
+    private String mapRecommendationToSentiment(Object recommendation) {
+        if (recommendation == null) return "neutral";
+        if (recommendation instanceof Boolean) {
+            return ((Boolean) recommendation) ? "Positive" : "Negative";
+        }
+        String recStr = recommendation.toString().trim().toLowerCase();
+        if (recStr.equals("true")) return "Positive";
+        if (recStr.equals("false")) return "Negative";
+        return "neutral";
+    }
+    // Add method to calculate overall sentiment
+    private String calculateOverallSentiment(String... sentiments) {
+        int Positive = 0, Negative = 0, neutral = 0;
+        for (String s : sentiments) {
+            if (s == null) continue;
+            switch (s.trim().toUpperCase()) {
+                case "Positive": Positive++; break;
+                case "Negative": Negative++; break;
+                default: neutral++;
+            }
+        }
+        if (Positive > Negative && Positive > neutral) return "Positive";
+        if (Negative > Positive && Negative > neutral) return "Negative";
+        return "neutral";
     }
 }

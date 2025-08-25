@@ -42,8 +42,11 @@ public class SentimentAnalysis {
     @Column(name = "fb_created_at")
     private LocalDateTime fb_created_at;
 
+    @Column(name = "u_feedback_for", length = 100)
+    private String u_feedback_for;
+
     public SentimentAnalysis(){}
-    public SentimentAnalysis(Long id, Long fb_id, String fb_frequency, String fb_satisfaction, String fb_recommendation, String fb_used_feature, String fb_issues_faced, String fb_suggestions, String fb_overall_summary, LocalDateTime fb_created_at) {
+    public SentimentAnalysis(Long id, Long fb_id, String fb_frequency, String fb_satisfaction, String fb_recommendation, String fb_used_feature, String fb_issues_faced, String fb_suggestions, String fb_overall_summary, LocalDateTime fb_created_at, String u_feedback_for) {
         this.id = id;
         this.fb_id = fb_id;
         this.fb_frequency = fb_frequency;
@@ -54,6 +57,7 @@ public class SentimentAnalysis {
         this.fb_suggestions = fb_suggestions;
         this.fb_overall_summary = fb_overall_summary;
         this.fb_created_at = fb_created_at;
+        this.u_feedback_for = u_feedback_for;
     }
 
     // Getters and setters
@@ -77,4 +81,6 @@ public class SentimentAnalysis {
     public void setFb_overall_summary(String fb_overall_summary) {this.fb_overall_summary = fb_overall_summary; }
     public LocalDateTime getFb_created_at() { return fb_created_at; }
     public void setFb_created_at(LocalDateTime fb_created_at) { this.fb_created_at = fb_created_at; }
+    public String getU_feedback_for() { return u_feedback_for; }
+    public void setU_feedback_for(String u_feedback_for) { this.u_feedback_for = u_feedback_for; }
 }
