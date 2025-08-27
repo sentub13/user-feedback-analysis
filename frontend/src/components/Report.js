@@ -27,6 +27,10 @@ ChartJS.register(
   Legend
 );
 
+import BarChart from './chart/BarChart';
+import TrendChart from './chart/TrendChart';
+import OverallChart from './chart/OverallChart';
+
 function Report() {
   const [reportData, setReportData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -122,7 +126,7 @@ function Report() {
   };
 
   const getDistribution = (field) => {
-    const distribution = { 'Positive': 0, 'Neutral': 0, 'Negative': 0 };
+    const distribution = { 'positive': 0, 'neutral': 0, 'negative': 0 };
     filteredData.forEach(item => {
       distribution[item[field]] = (distribution[item[field]] || 0) + 1;
     });
@@ -130,7 +134,7 @@ function Report() {
   };
 
   const pieChartData = {
-    labels: ['Positive', 'Neutral', 'Negative'],
+    labels: ['positive', 'neutral', 'negative'],
     datasets: [
       {
         data: Object.values(getDistribution('fb_overall_summary')),
@@ -229,9 +233,9 @@ function Report() {
                 onChange={handleFilterChange}
               >
                 <option value="">All</option>
-                <option value="Positive">Positive</option>
-                <option value="Neutral">Neutral</option>
-                <option value="Negative">Negative</option>
+                <option value="positive">positive</option>
+                <option value="neutral">neutral</option>
+                <option value="negative">negative</option>
               </select>
             </div>
             <div className="col-md-2 offset-md-2">
@@ -269,45 +273,7 @@ function Report() {
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
-                  <Bar
-                    data={{
-                      labels: ['Positive', 'Neutral', 'Negative'],
-                      datasets: [
-                        {
-                          data: Object.values(getDistribution('fb_overall_summary')),
-                          backgroundColor: [
-                            '#4BC0C0',
-                            '#FFCD56',
-                            '#FF6384'
-                          ],
-                          borderWidth: 1
-                        }
-                      ]
-                    }}
-                    options={{
-                      indexAxis: 'y',
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          display: false
-                        },
-                        tooltip: {
-                          callbacks: {
-                            label: (context) => {
-                              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                              const percentage = ((context.parsed.x / total) * 100).toFixed(1);
-                              return `${context.label}: ${percentage}%`;
-                            }
-                          }
-                        }
-                      },
-                      scales: {
-                        x: {
-                          beginAtZero: true
-                        }
-                      }
-                    }}
-                  />
+                  <BarChart feedbackData={filteredData}/>
                 ) : (
                   <div className="text-center text-muted">
                     <p>No data to display</p>
@@ -325,47 +291,7 @@ function Report() {
               </div>
               <div className="card-body">
                 {filteredData.length > 0 ? (
-                  <Line
-                    data={{
-                      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                      datasets: [
-                        {
-                          label: 'Positive',
-                          data: [12, 19, 3, 5, 2, 3],
-                          borderColor: '#4BC0C0',
-                          backgroundColor: '#4BC0C0',
-                          tension: 0.1
-                        },
-                        {
-                          label: 'Neutral',
-                          data: [2, 3, 20, 5, 1, 4],
-                          borderColor: '#FFCD56',
-                          backgroundColor: '#FFCD56',
-                          tension: 0.1
-                        },
-                        {
-                          label: 'Negative',
-                          data: [3, 10, 13, 15, 22, 30],
-                          borderColor: '#FF6384',
-                          backgroundColor: '#FF6384',
-                          tension: 0.1
-                        }
-                      ]
-                    }}
-                    options={{
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          position: 'bottom'
-                        }
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: true
-                        }
-                      }
-                    }}
-                  />
+                  <TrendChart feedbackData={filteredData}/>                  
                 ) : (
                   <div className="text-center text-muted">
                     <p>No data to display</p>
@@ -407,8 +333,8 @@ function Report() {
                           <td>{item.fb_suggestions}</td>
                           <td>
                           <span className={`badge ${
-                            item.fb_overall_summary === 'Positive' ? 'text-bg-success text-light' :
-                            item.fb_overall_summary === 'Neutral' ? 'text-bg-warning text-light' : 'text-bg-danger text-light'
+                            item.fb_overall_summary.toLowerCase() === 'positive' ? 'text-bg-success text-light' :
+                            item.fb_overall_summary.toLowerCase() === 'neutral' ? 'text-bg-warning text-light' : 'text-bg-danger text-light'
                           }`} style={{width: '65px'}}>
                             {item.fb_overall_summary}
                           </span>
@@ -432,9 +358,9 @@ function Report() {
               <div className="card-header title2">
                 <h6 className="mb-0">Overall Summary</h6>
               </div>
-              <div className="card-body">
+              <div className="card-body">               
                 {filteredData.length > 0 ? (
-                  <Pie data={pieChartData} options={pieChartOptions} />
+                  <OverallChart feedbackData={filteredData}/>
                 ) : (
                   <div className="text-center text-muted">
                     <p>No data to display</p>

@@ -31,7 +31,7 @@ public class SentimentAnalysisService {
         Annotation annotation = new Annotation(text);
         pipeline.annotate(annotation);
         List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-        if (sentences == null || sentences.isEmpty()) return "neutral";
+        if (sentences == null || sentences.isEmpty()) return "Neutral";
         int totalScore = 0;
         for (CoreMap sentence : sentences) {
             String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
@@ -41,14 +41,14 @@ public class SentimentAnalysisService {
         double avgScore = (double) totalScore / sentences.size();
         if (avgScore >= 3.0) return "Positive";
         if (avgScore <= 1.5) return "Negative";
-        return "neutral";
+        return "Neutral";
     }
 
     private int mapStanfordSentimentToScore(String sentiment) {
         switch (sentiment) {
             case "Very Positive": return 4;
             case "Positive": return 3;
-            case "neutral": return 2;
+            case "Neutral": return 2;
             case "Negative": return 1;
             case "Very Negative": return 0;
             default: return 2;

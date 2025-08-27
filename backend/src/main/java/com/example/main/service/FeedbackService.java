@@ -73,50 +73,50 @@ public class FeedbackService {
 
     // Add mapping methods for structured fields
     private String mapFrequencyToSentiment(String frequency) {
-        if (frequency == null) return "neutral";
+        if (frequency == null) return "Neutral";
         switch (frequency.trim().toLowerCase()) {
             case "never": return "Negative";
             case "rarely": return "Negative";
-            case "monthly": return "neutral";
+            case "monthly": return "Neutral";
             case "weekly": return "Positive";
             case "daily": return "Positive";
-            default: return "neutral";
+            default: return "Neutral";
         }
     }
     private String mapSatisfactionToSentiment(String satisfaction) {
-        if (satisfaction == null) return "neutral";
+        if (satisfaction == null) return "Neutral";
         switch (satisfaction.trim().toLowerCase()) {
             case "very unsatisfied": return "Negative";
             case "unsatisfied": return "Negative";
-            case "undecided": return "neutral";
+            case "undecided": return "Neutral";
             case "satisfied": return "Positive";
             case "very satisfied": return "Positive";
-            default: return "neutral";
+            default: return "Neutral";
         }
     }
     private String mapRecommendationToSentiment(Object recommendation) {
-        if (recommendation == null) return "neutral";
+        if (recommendation == null) return "Neutral";
         if (recommendation instanceof Boolean) {
             return ((Boolean) recommendation) ? "Positive" : "Negative";
         }
         String recStr = recommendation.toString().trim().toLowerCase();
         if (recStr.equals("true")) return "Positive";
         if (recStr.equals("false")) return "Negative";
-        return "neutral";
+        return "Neutral";
     }
     // Add method to calculate overall sentiment
     private String calculateOverallSentiment(String... sentiments) {
-        int Positive = 0, Negative = 0, neutral = 0;
+        int Positive = 0, Negative = 0, Neutral = 0;
         for (String s : sentiments) {
             if (s == null) continue;
             switch (s.trim().toUpperCase()) {
                 case "Positive": Positive++; break;
                 case "Negative": Negative++; break;
-                default: neutral++;
+                default: Neutral++;
             }
         }
-        if (Positive > Negative && Positive > neutral) return "Positive";
-        if (Negative > Positive && Negative > neutral) return "Negative";
-        return "neutral";
+        if (Positive > Negative && Positive > Neutral) return "Positive";
+        if (Negative > Positive && Negative > Neutral) return "Negative";
+        return "Neutral";
     }
 }
