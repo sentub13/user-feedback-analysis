@@ -44,7 +44,18 @@ public class SentimentAnalysisService {
         return "Neutral";
     }
 
-    private int mapStanfordSentimentToScore(String sentiment) {
+    /**
+ * Maps Stanford CoreNLP sentiment classifications to numeric scores
+ * @param sentiment The sentiment classification string from Stanford CoreNLP
+ * @return Integer score from 0-4, where:
+ *         4 = Very Positive
+ *         3 = Positive 
+ *         2 = Neutral
+ *         1 = Negative
+ *         0 = Very Negative
+ *         Default returns 2 (Neutral)
+ */
+private int mapStanfordSentimentToScore(String sentiment) {
         switch (sentiment) {
             case "Very Positive": return 4;
             case "Positive": return 3;

@@ -94,7 +94,13 @@ public class FeedbackService {
             default: return "Neutral";
         }
     }
-    private String mapRecommendationToSentiment(Object recommendation) {
+    /**
+ * Maps a recommendation value to a sentiment string.
+ * Handles boolean values and string representations of true/false.
+ * @param recommendation The recommendation value to analyze
+ * @return "Positive", "Negative", or "Neutral" sentiment
+ */
+private String mapRecommendationToSentiment(Object recommendation) {
         if (recommendation == null) return "Neutral";
         if (recommendation instanceof Boolean) {
             return ((Boolean) recommendation) ? "Positive" : "Negative";
