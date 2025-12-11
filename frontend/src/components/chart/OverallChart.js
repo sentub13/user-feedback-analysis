@@ -49,7 +49,7 @@ const OverallChart = ({ feedbackData = [] }) => {
     },
   };
 
-  return <div style={{height: '300px'}}><Pie data={data} options={options} /></div>;
+  return <div style={{height: '275px'}}><Pie data={data} options={options} /></div>;
 };
 
 export default OverallChart;

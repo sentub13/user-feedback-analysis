@@ -79,11 +79,12 @@ const TrendChart = ({ feedbackData = [] }) => {
   };
 
   return (
-    <div style={{height: '300px'}}>
+    <div style={{height: '275px'}}>
       <Line
         data={processData()}
         options={{
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'bottom'

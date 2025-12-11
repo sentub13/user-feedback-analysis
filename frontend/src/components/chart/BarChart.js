@@ -42,6 +42,7 @@ const BarChart = ({ feedbackData = [] }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'bottom',
@@ -53,7 +54,7 @@ const BarChart = ({ feedbackData = [] }) => {
     },
   };
 
-  return <div style={{height: '300px'}}> <Bar data={data} options={options} /> </div>;
+  return <div style={{height: '275px'}}> <Bar data={data} options={options} /> </div>;
 };
 
 export default BarChart;
