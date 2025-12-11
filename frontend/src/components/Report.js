@@ -114,16 +114,16 @@ function Report() {
       <div className="fixed-top bg-info pb-2 pt-3">
         <div className='container'>
           <h5 className='title'>
-              <span className='text-white'>Dashboard Report </span>
+              <span className='text-white font-bold'>Dashboard Report </span>
               <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link>
           </h5>
           </div>
       </div>
       
-      <div className='border-bottom mt-5 mb-3 pt-1 pb-3'>
-        <div className='row d-flex align-items-end mt-3'> 
-          <div className="col-md-4 d-flex align-items-end">
-            <ul className="nav nav-underline">
+      <div className='border-bottom border-top mt-5 mb-4 pb-4'>
+        <div className='row d-flex align-items-end mt-4 pt-2'> 
+          <div className="col-md-5">
+            <ul className="nav nav-underline d-flex align-items-end">
               <li className="nav-item fs-6">
                 <button 
                   className={`nav-link ${activeTab === 'summary' ? 'active' : ''}`} 
@@ -163,7 +163,7 @@ function Report() {
               />
             </div>            
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
               <select 
                   className="form-select form-select-sm" 
                   id="u_feedback_for" 

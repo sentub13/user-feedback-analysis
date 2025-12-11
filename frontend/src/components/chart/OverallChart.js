@@ -37,18 +37,19 @@ const OverallChart = ({ feedbackData = [] }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'bottom',
       },
       title: {
-        display: true,
+        display: false,
         text: 'Feedback Satisfaction Distribution',
       },
     },
   };
 
-  return <Pie data={data} options={options} />;
+  return <div style={{height: '300px'}}><Pie data={data} options={options} /></div>;
 };
 
 export default OverallChart;

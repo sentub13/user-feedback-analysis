@@ -25,28 +25,24 @@ input[type="radio"]:checked {
   font-weight: bold;
   text-transform: uppercase;
 }
-
-/* .nav-link:hover {
-  color: #fff !important;
-} */
-.nav-underline .nav-link {
-  color: #8a8a8a;
-  font-weight: 500;
-}
-
 .nav-underline .nav-link.active, .nav-underline .show>.nav-link{
   color: #2193b0;
-  /* font-weight: normal;
-  padding: 5px 12px;
-  border-radius: 4px;
-  background: #2193b0 !important; */
 }
-.nav-underline .nav-link.active::after{
+.nav-link {
+  color: #4a4a4a;
+  position: relative;
+  font-weight: 600;
+  padding: 0 20px;
+}
+.nav-link.active::after{
+  content: '';
   position: absolute;
-  width: 100px;
-  height: 10px;
-  top: 10px;
-  bottom: 0px;
+  width: 100%;
+  height: 2px;
+  top: 47px;
+  bottom: 0;
+  left: 0;
+  background: #2193b0;
 }
 
 .title {
@@ -56,9 +52,21 @@ input[type="radio"]:checked {
   float: right;
   cursor: pointer;
 }
-.title2 {
-  color: #fff;
-  background: #2193b0;
+.card-box1 {
+  border-radius: 8px;
+}
+.title2 {  
+  padding-top: 15px;
+  color: #4a4a4a;
+  background: none;
+  border-radius: 12px;
+  border-bottom: 1px solid #fff;
+  /* background: #ebebeb;
+  border-bottom: 1px solid #dedede; */
+}
+.title2 h6{
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .form-label {

@@ -5,8 +5,8 @@ const DetailView = ({ feedbackData = [], filters = {} }) => {
   return (
     <div className='row mb-4'>
       <div className="col-md-12">
-        <div className="card">
-          <div className="card-header title2">
+        <div className="card card-box1">
+          <div className="card-header title2 rounded-0">
             <h6 className="mb-0 ">Feedback Data ({feedbackData.length} records)</h6>
           </div>
           <div className="card-body">

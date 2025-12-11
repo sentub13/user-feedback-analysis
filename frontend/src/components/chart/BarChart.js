@@ -44,16 +44,16 @@ const BarChart = ({ feedbackData = [] }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: 'bottom',
       },
       title: {
-        display: true,
+        display: false,
         text: 'Feedback Response Distribution',
       },
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return <div style={{height: '300px'}}> <Bar data={data} options={options} /> </div>;
 };
 
 export default BarChart;

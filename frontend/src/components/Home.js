@@ -118,7 +118,7 @@ function Home() {
           <div className="d-flex align-items-center">
               <div className="navbar-brand">
                 <select
-                  className="form-select"
+                  className="form-select form-select-sm"
                   name="u_feedback_for"
                   value={formData.u_feedback_for}
                   onChange={handleChange}

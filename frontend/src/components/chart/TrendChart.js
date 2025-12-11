@@ -79,22 +79,24 @@ const TrendChart = ({ feedbackData = [] }) => {
   };
 
   return (
-    <Line
-      data={processData()}
-      options={{
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom'
+    <div style={{height: '300px'}}>
+      <Line
+        data={processData()}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }}
-    />
+        }}
+      />
+    </div>
   );
 };
 
