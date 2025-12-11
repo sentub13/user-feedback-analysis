@@ -11,9 +11,16 @@ function Report() {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('summary');
 
+  // Get current month dates
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const currentMonthStart = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+  const currentMonthEnd = today.toISOString().split('T')[0];
+
   const [filters, setFilters] = useState({
-    startDate: '',
-    endDate: '',
+    startDate: currentMonthStart,
+    endDate: currentMonthEnd,
     u_feedback_for: '',
     satisfaction: '',
     overallSummary: '',
@@ -94,10 +101,15 @@ function Report() {
     });
   };
 
+  // Get date limits (one year ago from today)
+  const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+  const maxDate = today.toISOString().split('T')[0];
+  const minDate = oneYearAgo.toISOString().split('T')[0];
+
   const clearFilters = () => {
     setFilters({
-      startDate: '',
-      endDate: '',
+      startDate: currentMonthStart,
+      endDate: currentMonthEnd,
       u_feedback_for: '',
       satisfaction: '',
       overallSummary: '',
@@ -152,6 +164,8 @@ function Report() {
                 className="form-control form-control-sm" 
                 name="startDate"
                 value={filters.startDate}
+                min={minDate}
+                max={maxDate}
                 onChange={handleFilterChange}
               />
               <span className="input-group-text">To</span>
@@ -159,6 +173,8 @@ function Report() {
                 className="form-control form-control-sm" 
                 name="endDate"
                 value={filters.endDate}
+                min={minDate}
+                max={maxDate}
                 onChange={handleFilterChange}
               />
             </div>            
