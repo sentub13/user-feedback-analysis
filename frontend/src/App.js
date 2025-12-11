@@ -4,6 +4,7 @@ import './App.css';
 import Home from './components/Home';
 import Report from './components/Report';
 import About from './components/About';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
@@ -21,7 +22,11 @@ function App() {
       <div className="container-fluid">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/report" element={<Report />} />
+          <Route path="/report" element={
+            <ErrorBoundary>
+              <Report />
+            </ErrorBoundary>
+          } />
         </Routes>
       </div>
     </Router>

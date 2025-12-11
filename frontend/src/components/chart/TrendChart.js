@@ -33,32 +33,21 @@ const TrendChart = ({ feedbackData = [] }) => {
     };
 
     feedbackData.forEach(feedback => {
+      if (!feedback.fb_created_at) return;
+      
       const date = new Date(feedback.fb_created_at);
+      if (isNaN(date.getTime())) return;
+      
       const month = date.getMonth();
-
-      const countSentiments = (obj) => {
-        let positive = 0, neutral = 0, negative = 0;
-        Object.values(obj).forEach(value => {
-          if (value.toLowerCase() === 'positive') positive++;
-          else if (value.toLowerCase() === 'neutral') neutral++;
-          else if (value.toLowerCase() === 'negative') negative++;
-        });
-        return { positive, neutral, negative };
-      };
-
-      const sentiments = countSentiments({
-        frequency: feedback.fb_frequency,
-        satisfaction: feedback.fb_satisfaction,
-        recommendation: feedback.fb_recommendation,
-        usedFeature: feedback.fb_used_feature,
-        issuesFaced: feedback.fb_issues_faced,
-        suggestions: feedback.fb_suggestions,
-        overallSummary: feedback.fb_overall_summary
-      });
-
-      datasets.Positive[month] += sentiments.positive;
-      datasets.Neutral[month] += sentiments.neutral;
-      datasets.Negative[month] += sentiments.negative;
+      const sentiment = feedback.fb_overall_summary?.toLowerCase();
+      
+      if (sentiment === 'positive') {
+        datasets.Positive[month]++;
+      } else if (sentiment === 'negative') {
+        datasets.Negative[month]++;
+      } else if (sentiment === 'neutral') {
+        datasets.Neutral[month]++;
+      }
     });
 
     return {
@@ -67,22 +56,22 @@ const TrendChart = ({ feedbackData = [] }) => {
         {
           label: 'Positive',
           data: datasets.Positive,
-          borderColor: '#4BC0C0',
-          backgroundColor: '#4BC0C0',
+          borderColor: '#4CAF50',
+          backgroundColor: 'rgba(76, 175, 80, 0.1)',
           tension: 0.1
         },
         {
           label: 'Neutral',
           data: datasets.Neutral,
-          borderColor: '#FFCD56',
-          backgroundColor: '#FFCD56',
+          borderColor: '#FF9800',
+          backgroundColor: 'rgba(255, 152, 0, 0.1)',
           tension: 0.1
         },
         {
           label: 'Negative',
           data: datasets.Negative,
-          borderColor: '#FF6384',
-          backgroundColor: '#FF6384',
+          borderColor: '#F44336',
+          backgroundColor: 'rgba(244, 67, 54, 0.1)',
           tension: 0.1
         }
       ]

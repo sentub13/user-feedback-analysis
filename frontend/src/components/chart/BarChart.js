@@ -15,22 +15,18 @@ import {
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 const BarChart = ({ feedbackData = [] }) => {
-  // Count feedback responses
+  // Count feedback responses based on overall summary
   const counts = {
-    Positive: 0,
-    Negative: 0,
-    Neutral: 0
+    positive: 0,
+    negative: 0,
+    neutral: 0
   };
 
   feedbackData.forEach(feedback => {
-    Object.entries(feedback).forEach(([key, value]) => {
-      if (key.startsWith('fb_') && typeof value === 'string') {
-        const normalizedValue = value.toLowerCase() === 'neutral' ? 'Neutral' : value;
-        if (counts.hasOwnProperty(normalizedValue)) {
-          counts[normalizedValue]++;
-        }
-      }
-    });
+    const sentiment = feedback.fb_overall_summary?.toLowerCase();
+    if (sentiment && counts.hasOwnProperty(sentiment)) {
+      counts[sentiment]++;
+    }
   });
 
   const data = {
@@ -38,7 +34,7 @@ const BarChart = ({ feedbackData = [] }) => {
     datasets: [
       {
         label: 'Feedback Responses',
-        data: [counts.Positive, counts.Negative, counts.Neutral],
+        data: [counts.positive, counts.negative, counts.neutral],
         backgroundColor: ['#4CAF50', '#F44336', '#9E9E9E'],
       },
     ],

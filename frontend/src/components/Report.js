@@ -1,41 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Pie, Line, Bar } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
 import { getSentimentAnalysis } from '../services/reportService';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement, 
-  LineElement,
-  ArcElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-import BarChart from './chart/BarChart';
-import TrendChart from './chart/TrendChart';
-import OverallChart from './chart/OverallChart';
+import SummaryView from './chart/SummaryView';
+import DetailView from './chart/DetailView'; 
 
 function Report() {
   const [reportData, setReportData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('summary');
+
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -58,11 +33,18 @@ function Report() {
   const fetchReportData = async () => {
     try {
       setLoading(true);
-      const data = await getSentimentAnalysis();
-      setReportData(data);
       setError('');
+      const data = await getSentimentAnalysis();
+      if (Array.isArray(data)) {
+        setReportData(data);
+      } else {
+        setReportData([]);
+        setError('Invalid data format received from server');
+      }
     } catch (err) {
-      setError(err.message);
+      console.error('Error fetching report data:', err);
+      setError(err.message || 'Failed to fetch report data');
+      setReportData([]);
     } finally {
       setLoading(false);
     }
@@ -125,57 +107,7 @@ function Report() {
     });
   };
 
-  const getDistribution = (field) => {
-    const distribution = { 'positive': 0, 'neutral': 0, 'negative': 0 };
-    filteredData.forEach(item => {
-      distribution[item[field]] = (distribution[item[field]] || 0) + 1;
-    });
-    return distribution;
-  };
 
-  const pieChartData = {
-    labels: ['positive', 'neutral', 'negative'],
-    datasets: [
-      {
-        data: Object.values(getDistribution('fb_overall_summary')),
-        backgroundColor: [
-          '#4BC0C0',
-          '#FFCD56',
-          '#FF6384'
-        ],
-        borderWidth: 1
-      }
-    ]
-  };
-
-  const pieChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'bottom'
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-            const percentage = ((context.parsed / total) * 100).toFixed(1);
-            return `${context.label}: ${percentage}%`;
-          }
-        }
-      },
-      datalabels: {
-        formatter: (value, ctx) => {
-          const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-          const percentage = ((value / total) * 100).toFixed(1);
-          return `${percentage}%`;
-        },
-        color: '#fff',
-        font: {
-          weight: 'bold'
-        }
-      }
-    }
-  };
 
   return (
     <div className="container mt-4">
@@ -184,72 +116,87 @@ function Report() {
           <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link>
       </h5>
       
-      <div className="card mb-4">
-        <div className="card-header title2">
-          <h6 className="mb-0">Filters</h6>
-        </div>
-        <div className="card-body">
-          <div className="row">
-            <div className="col-md-2">
-              <label className="form-label">Start Date</label>
-              <input
-                type="date"
-                className="form-control"
+      <div className='border-bottom mb-3 pb-3'>
+        <div className='row d-flex align-items-end'> 
+          <div className="col-md-4">
+            <ul className="nav nav-underline">
+              <li className="nav-item fs-5">
+                <button 
+                  className={`nav-link ${activeTab === 'summary' ? 'active' : ''}`} 
+                  onClick={() => setActiveTab('summary')}
+                  style={{ border: 'none', background: 'none' }}
+                >
+                  Summary
+                </button>
+              </li>
+              <li className="nav-item fs-5">
+                <button 
+                  className={`nav-link ${activeTab === 'details' ? 'active' : ''}`} 
+                  onClick={() => setActiveTab('details')}
+                  style={{ border: 'none', background: 'none' }}
+                >
+                  Details
+                </button>
+              </li>
+            </ul>
+          </div>
+         
+          <div className="col-md-2">   
+            <div className='form-floating input-group-sm'>          
+              <input type="date" 
+                className="form-control" 
+                id="startDate" 
                 name="startDate"
+                placeholder="Start Date"
                 value={filters.startDate}
                 onChange={handleFilterChange}
               />
-            </div>
-            <div className="col-md-2">
-              <label className="form-label">End Date</label>
-              <input
-                type="date"
-                className="form-control"
+              <label htmlFor="startDate">Start Date</label> 
+            </div>            
+          </div>
+          <div className="col-md-2 form-floating">      
+            <div className='form-floating input-group-sm'>            
+              <input type="date" 
+                className="form-control" 
+                id="endDate" 
                 name="endDate"
+                placeholder="End Date"
                 value={filters.endDate}
                 onChange={handleFilterChange}
               />
-            </div>
-            <div className="col-md-2">
-            <label className="form-label">Group</label>
-            <select
-              className="form-select"
-              name="u_feedback_for"
-              value={filters.u_feedback_for}
-              onChange={handleFilterChange}
-            >
-              <option value="">All</option>
-              <option value="IJP">IJP</option>
-              <option value="Wordday">Wordday</option>
-              <option value="Service Now">Service Now</option>
-            </select>
+              <label htmlFor="endDate">End Date</label>     
+              </div>         
           </div>
-            <div className="col-md-2">
-              <label className="form-label">Overall Summary</label>
-              <select
-                className="form-select"
-                name="overallSummary"
-                value={filters.overallSummary}
-                onChange={handleFilterChange}
-              >
+          <div className="col-md-3 form-floating">
+            <div className='form-floating'> 
+              <select 
+                  className="form-select" 
+                  id="u_feedback_for" 
+                  name="u_feedback_for"
+                  value={filters.u_feedback_for}
+                  onChange={handleFilterChange}
+                >
+                <option value="" disabled>Select Group</option>
                 <option value="">All</option>
-                <option value="positive">positive</option>
-                <option value="neutral">neutral</option>
-                <option value="negative">negative</option>
+                <option value="IJP">IJP</option>
+                <option value="Wordday">Wordday</option>
+                <option value="Service Now">Service Now</option>
               </select>
-            </div>
-            <div className="col-md-2 offset-md-2">
-              <button
-                type="button"
-                className="btn btn-secondary mt-4 float-end"
-                onClick={clearFilters}
-              >
-                Clear Filters
-              </button>
-            </div>
+              <label htmlFor="u_feedback_for">Group</label>
+              </div>
           </div>
-        </div>
-      </div>
+
+          <div className="col-md-1 d-flex align-items-end">
+            <button
+              type="button"
+              className="btn btn-secondary mb-3"
+              onClick={clearFilters}
+            >
+              Clear
+            </button>
+          </div>
+        </div> 
+      </div> 
 
       {error && (
         <div className="alert alert-danger" role="alert">
@@ -265,112 +212,13 @@ function Report() {
         </div>
       ) : (
         <>        
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header title2">
-                <h6 className="mb-0"> Summary - {filters.u_feedback_for || 'All Groups'}</h6>
-              </div>
-              <div className="card-body">
-                {filteredData.length > 0 ? (
-                  <BarChart feedbackData={filteredData}/>
-                ) : (
-                  <div className="text-center text-muted">
-                    <p>No data to display</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          {activeTab === 'summary' && (
+            <SummaryView feedbackData={filteredData} filters={filters}/>
+          )}
 
-
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header title2">
-                <h6 className="mb-0">Trends - {filters.u_feedback_for || 'All Groups'}</h6>
-              </div>
-              <div className="card-body">
-                {filteredData.length > 0 ? (
-                  <TrendChart feedbackData={filteredData}/>                  
-                ) : (
-                  <div className="text-center text-muted">
-                    <p>No data to display</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row my-4">
-          <div className="col-md-8">
-            <div className="card">
-              <div className="card-header title2">
-                <h6 className="mb-0 ">Feedback Data ({filteredData.length} records)</h6>
-              </div>
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table table-striped">
-                    <thead>
-                      <tr>
-                        <th>Frequency</th>
-                        <th>Satisfaction</th>
-                        <th>Recommendation</th>
-                        <th>Used Features</th>
-                        <th>Issues Faced</th>
-                        <th>Suggestions</th>
-                        <th>Overall Sentiment</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredData.length > 0 ? (
-                        filteredData.map((item) => (
-                          <tr key={item.id}>
-                          <td>{item.fb_frequency}</td>
-                          <td>{item.fb_satisfaction}</td>
-                          <td>{item.fb_recommendation}</td>
-                          <td>{item.fb_used_feature}</td>
-                          <td>{item.fb_issues_faced}</td>
-                          <td>{item.fb_suggestions}</td>
-                          <td>
-                          <span className={`badge ${
-                            item.fb_overall_summary.toLowerCase() === 'positive' ? 'text-bg-success text-light' :
-                            item.fb_overall_summary.toLowerCase() === 'neutral' ? 'text-bg-warning text-light' : 'text-bg-danger text-light'
-                          }`} style={{width: '65px'}}>
-                            {item.fb_overall_summary}
-                          </span>
-                        </td>
-                        </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="8" className="text-center">No data available</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-header title2">
-                <h6 className="mb-0">Overall Summary</h6>
-              </div>
-              <div className="card-body">               
-                {filteredData.length > 0 ? (
-                  <OverallChart feedbackData={filteredData}/>
-                ) : (
-                  <div className="text-center text-muted">
-                    <p>No data to display</p>
-                  </div>
-                )}
-              </div>  
-
-            </div>
-          </div>
-        </div>
+          {activeTab === 'details' && (
+            <DetailView feedbackData={filteredData} filters={filters}/>
+          )}
         </>        
       )}
     </div>

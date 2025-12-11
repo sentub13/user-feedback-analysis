@@ -9,13 +9,13 @@ import {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const OverallChart = ({ feedbackData = [] }) => { // Add default empty array
-    console.log("feedbackData----", feedbackData)
-  // Count feedback sentiments 
+const OverallChart = ({ feedbackData = [] }) => {
+  // Count feedback sentiments based on overall summary
   const sentimentCounts = feedbackData.reduce((acc, item) => {
-    acc.positive += ['positive', 'Positive'].includes(item.fb_satisfaction) ? 1 : 0;
-    acc.negative += ['negative', 'Negative'].includes(item.fb_satisfaction) ? 1 : 0;
-    acc.neutral += ['neutral', 'Neutral'].includes(item.fb_satisfaction) ? 1 : 0;
+    const sentiment = item.fb_overall_summary?.toLowerCase();
+    if (sentiment === 'positive') acc.positive++;
+    else if (sentiment === 'negative') acc.negative++;
+    else if (sentiment === 'neutral') acc.neutral++;
     return acc;
   }, { positive: 0, negative: 0, neutral: 0 });
 
@@ -29,7 +29,7 @@ const OverallChart = ({ feedbackData = [] }) => { // Add default empty array
           sentimentCounts.negative, 
           sentimentCounts.neutral
         ],
-        backgroundColor: ['#4caf50', '#f44336', '#ff9800'],
+        backgroundColor: ['#4CAF50', '#F44336', '#FF9800'],
         borderWidth: 1,
       },
     ],
