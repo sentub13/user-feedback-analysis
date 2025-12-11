@@ -34,6 +34,12 @@ function Report() {
   }, []);
 
   useEffect(() => {
+    if (filters.startDate || filters.endDate) {
+      fetchReportData();
+    }
+  }, [filters.startDate, filters.endDate]);
+
+  useEffect(() => {
     applyFilters();
   }, [reportData, filters]);
 
@@ -95,9 +101,10 @@ function Report() {
   };
 
   const handleFilterChange = (e) => {
+    const { name, value } = e.target;
     setFilters({
       ...filters,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
