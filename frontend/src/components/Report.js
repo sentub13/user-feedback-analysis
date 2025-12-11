@@ -111,16 +111,20 @@ function Report() {
 
   return (
     <div className="container mt-4">
-      <h5 className='title'>
-          <span>Dashboard Report </span>
-          <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link>
-      </h5>
+      <div className="fixed-top bg-info pb-2 pt-3">
+        <div className='container'>
+          <h5 className='title'>
+              <span className='text-white'>Dashboard Report </span>
+              <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link>
+          </h5>
+          </div>
+      </div>
       
-      <div className='border-bottom mb-3 pb-3'>
-        <div className='row d-flex align-items-end'> 
-          <div className="col-md-4">
+      <div className='border-bottom mt-5 mb-3 pt-1 pb-3'>
+        <div className='row d-flex align-items-end mt-3'> 
+          <div className="col-md-4 d-flex align-items-end">
             <ul className="nav nav-underline">
-              <li className="nav-item fs-5">
+              <li className="nav-item fs-6">
                 <button 
                   className={`nav-link ${activeTab === 'summary' ? 'active' : ''}`} 
                   onClick={() => setActiveTab('summary')}
@@ -129,7 +133,7 @@ function Report() {
                   Summary
                 </button>
               </li>
-              <li className="nav-item fs-5">
+              <li className="nav-item fs-6">
                 <button 
                   className={`nav-link ${activeTab === 'details' ? 'active' : ''}`} 
                   onClick={() => setActiveTab('details')}
@@ -141,36 +145,27 @@ function Report() {
             </ul>
           </div>
          
-          <div className="col-md-2">   
-            <div className='form-floating input-group-sm'>          
+          <div className="col-md-4">   
+            <div className="input-group input-group-sm">
+              <span className="input-group-text">From</span>
               <input type="date" 
-                className="form-control" 
-                id="startDate" 
+                className="form-control form-control-sm" 
                 name="startDate"
-                placeholder="Start Date"
                 value={filters.startDate}
                 onChange={handleFilterChange}
               />
-              <label htmlFor="startDate">Start Date</label> 
-            </div>            
-          </div>
-          <div className="col-md-2 form-floating">      
-            <div className='form-floating input-group-sm'>            
+              <span className="input-group-text">To</span>
               <input type="date" 
-                className="form-control" 
-                id="endDate" 
+                className="form-control form-control-sm" 
                 name="endDate"
-                placeholder="End Date"
                 value={filters.endDate}
                 onChange={handleFilterChange}
               />
-              <label htmlFor="endDate">End Date</label>     
-              </div>         
+            </div>            
           </div>
-          <div className="col-md-3 form-floating">
-            <div className='form-floating'> 
+          <div className="col-md-3">
               <select 
-                  className="form-select" 
+                  className="form-select form-select-sm" 
                   id="u_feedback_for" 
                   name="u_feedback_for"
                   value={filters.u_feedback_for}
@@ -182,14 +177,12 @@ function Report() {
                 <option value="Wordday">Wordday</option>
                 <option value="Service Now">Service Now</option>
               </select>
-              <label htmlFor="u_feedback_for">Group</label>
-              </div>
           </div>
 
           <div className="col-md-1 d-flex align-items-end">
             <button
               type="button"
-              className="btn btn-secondary mb-3"
+              className="btn btn-secondary btn-sm"
               onClick={clearFilters}
             >
               Clear

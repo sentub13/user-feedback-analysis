@@ -20,7 +20,8 @@ input[type="radio"]:checked {
   accent-color: #0c7a96;
 }
 
-.navbar-brand {
+.navbar-brand i{
+  color: #2193b0 !important;
   font-weight: bold;
   text-transform: uppercase;
 }
