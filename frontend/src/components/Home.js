@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { submitFeedback } from '../services/feedbackService';
 import { FormInput, RadioGroup, TextArea } from './FormComponents';
 
 const initialFormState = {
-  u_fname: '',
-  u_lastname: '',
+  u_name: '',
   u_id: '',
   u_email: '',
-  u_frequency: '',
-  u_suggestions: '',
+  u_frequency: '',  
   u_satisfaction: '',
-  u_issues_faced: '',
   u_recommendation: '',
-  u_used_feature: ''
+  u_used_feature: '',
+  u_issues_faced: '',
+  u_suggestions: '',
+  u_feedback_for: ''
 };
 
 function Home() {
@@ -28,12 +29,25 @@ function Home() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.u_frequency) newErrors.u_frequency = 'This field is required';
-    if (!formData.u_suggestions) newErrors.u_suggestions = 'This field is required';
-    if (!formData.u_satisfaction) newErrors.u_satisfaction = 'This field is required';
-    if (!formData.u_issues_faced) newErrors.u_issues_faced = 'This field is required';
-    if (!formData.u_recommendation) newErrors.u_recommendation = 'This field is required';
-    if (!formData.u_used_feature) newErrors.u_used_feature = 'This field is required';
+    // Mandatory fields validation
+    if (!formData.u_name) newErrors.u_name = 'This field is required';
+    if (!formData.u_id) newErrors.u_id = 'This field is required';
+    if (!formData.u_email) newErrors.u_email = 'This field is required';
+
+    // At least one field from the rest should be filled
+    const optionalFields = [
+      formData.u_frequency,
+      formData.u_satisfaction,
+      formData.u_recommendation,
+      formData.u_used_feature,
+      formData.u_issues_faced,
+      formData.u_suggestions
+    ];
+
+    if (!optionalFields.some(field => field !== '')) {
+      newErrors.general = 'At least one survey question must be answered';
+    }
+
     return newErrors;
   };
 
@@ -45,22 +59,33 @@ function Home() {
         await submitFeedback(formData);
         alert('Feedback submitted successfully!');
         setFormData(initialFormState);
+        handleReset();
       } catch (error) {
         console.error('Feedback submission error:', error);
-        alert('Error submitting feedback. Please try again.');
+        const errorMessage = error.message.includes('Network error') 
+          ? 'Unable to connect to server. Please check your connection and try again.'
+          : error.message.includes('500')
+          ? 'Server error occurred. Please try again later or contact support.'
+          : `Error: ${error.message}`;
+        alert(errorMessage);
       }
     } else {
       setErrors(newErrors);
     }
   };
 
+  const handleReset = () => {
+    setFormData(initialFormState);
+    setErrors({});
+  };
+
   const frequencyOptions = [
-    { value: '1', label: 'Daily' },
-    { value: '2', label: 'Weekly' },
-    { value: '3', label: 'Monthly' },
-    { value: '4', label: 'Rarely' },
-    { value: '5', label: 'First time' },
-    { value: '6', label: 'Never' }
+    { value: 'Daily', label: 'Daily' },
+    { value: 'Weekly', label: 'Weekly' },
+    { value: 'Monthly', label: 'Monthly' },
+    { value: 'Rarely', label: 'Rarely' },
+    { value: 'First time', label: 'First time' },
+    { value: 'Never', label: 'Never' }
   ];
 
   const satisfactionOptions = [
@@ -87,95 +112,113 @@ function Home() {
     <div className="row formAreaBg">
       <div className="col-md-8 offset-md-2">
         <div className='formarea'>
-          <h5 className='title'>Customer Feedback Survey</h5>
+        <h5 className='title d-flex justify-content-between align-items-center'>
+          <span>Customer Feedback Survey </span>
+
+          <div className="d-flex align-items-center">
+              <div className="navbar-brand">
+                <select
+                  className="form-select form-select-sm"
+                  name="u_feedback_for"
+                  value={formData.u_feedback_for}
+                  onChange={handleChange}
+                >
+                  <option value="">Survey for</option>
+                  <option value="IJP">IJP</option>
+                  <option value="Wordday">Wordday</option>
+                  <option value="Service Now">Service Now</option>
+                </select>
+              </div>
+              <Link className="navbar-brand ms-2" to="/report"><i className="fas fa-chart-bar reload me-3" title="View Reports"></i></Link>
+              {/* <Link className="navbar-brand" to="/"><i className="fas fa-paper-plane reload me-3" title="Submit Feedback"></i></Link> */}
+          </div>
+        </h5>
           <div className='text-secondary'> <small>This is sample customer feedback form for TICL project </small> </div>
           <div className='mb-3 text-secondary'> <small>Hi, Sentu. When you submit this form, the owner will see your name and email address.</small> </div>
           
           <form onSubmit={handleSubmit}>
             <FormInput
-              label="1.Please enter your first name :"
-              name="u_fname"
-              value={formData.u_fname}
+              label="Please enter your name : *"
+              name="u_name"
+              value={formData.u_name}
               onChange={handleChange}
+              style={{width: '200px'}}
+              error={errors.u_name}
             />
 
             <FormInput
-              label="2. Please enter your last name :"
-              name="u_lastname"
-              value={formData.u_lastname}
-              onChange={handleChange}
-            />
-
-            <FormInput
-              label="3. Please enter your User Id : "
+              label="Please enter your user Id : *"
               name="u_id"
               value={formData.u_id}
               onChange={handleChange}
-              type="number"
+              type="number" 
+              style={{width: '200px'}}
+              error={errors.u_id}
             />
 
             <FormInput
-              label="4. Please enter your Email : "
+              label="Please enter your email : *"
               name="u_email"
               type="email"
               value={formData.u_email}
               onChange={handleChange}
+              style={{width: '200px'}}
+              error={errors.u_email}
             />
 
+            <h5 className='title mb-3'>Take Survey</h5>
+            {errors.general && <div className="text-danger mb-3">{errors.general}</div>}
+
             <RadioGroup
-              label="5. How frequently do you use the portal?"
+              label="1. How frequently do you use the portal?"
               name="u_frequency"
               options={frequencyOptions}
               value={formData.u_frequency}
               onChange={handleChange}
-              error={errors.u_frequency}
-            />
-
-            <TextArea
-              label="6. Do you have any suggestions to improve our portal features? *"
-              name="u_suggestions"
-              value={formData.u_suggestions}
-              onChange={handleChange}
-              error={errors.u_suggestions}
-            />
+            />           
 
             <RadioGroup
-              label="7. Are you satisfied with this portal overall? *"
+              label="2. Are you satisfied with this portal overall?"
               name="u_satisfaction"
               options={satisfactionOptions}
               value={formData.u_satisfaction}
               onChange={handleChange}
-              error={errors.u_satisfaction}
-            />
-
-            <TextArea
-              label="8. Did you face any issues while using the portal? *"
-              name="u_issues_faced"
-              value={formData.u_issues_faced}
-              onChange={handleChange}
-              error={errors.u_issues_faced}
-            />
+            />           
 
             <RadioGroup
-              label="9. Will you recommend this portal to your colleagues? *"
+              label="3. Will you recommend this portal to your colleagues?"
               name="u_recommendation"
               options={recommendOptions}
               value={formData.u_recommendation}
               onChange={handleChange}
-              error={errors.u_recommendation}
             />
 
             <RadioGroup
-              label="10. What is your most used feature? *"
+              label="4. What is your most used feature?"
               name="u_used_feature"
               options={featureOptions}
               value={formData.u_used_feature}
               onChange={handleChange}
-              error={errors.u_used_feature}
+            />            
+
+            <TextArea
+              label="5. Did you face any issues while using the portal?"
+              name="u_issues_faced"
+              value={formData.u_issues_faced}
+              onChange={handleChange}
+            />
+
+            <TextArea
+              label="6. Do you have any suggestions to improve our portal features?"
+              name="u_suggestions"
+              value={formData.u_suggestions}
+              onChange={handleChange}
             />
 
             <div className="mb-3 text-start">
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <button type="submit" className="btn btn-primary me-2">Submit</button>
+              <button type="submit" className="btn btn-secondary me-2" onClick={handleReset}>Reset</button>
+              {/* <i className="fas fa-redo reload me-3" onClick={handleReset} title="Refresh form"></i> */}
             </div>
           </form>
         </div>

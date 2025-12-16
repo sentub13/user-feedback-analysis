@@ -5,7 +5,7 @@ const RadioGroup = ({ label, name, options, value, onChange, error }) => (
       <label className="form-label">{label}</label>
       <div>
         {options.map(option => (
-          <div key={option.value} className="form-check form-check-inline">
+          <div key={option.value} className="form-check form-check-block">
             <input
               type="radio"
               name={name}

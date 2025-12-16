@@ -1,6 +1,7 @@
 body {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 400;
   font-family: "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -14,17 +15,58 @@ input, textarea, select {
   resize: none;
 }
 
-.navbar-brand {
+/* Style radio button when checked */
+input[type="radio"]:checked {
+  accent-color: #0c7a96;
+}
+
+.navbar-brand i{
+  color: #2193b0 !important;
   font-weight: bold;
   text-transform: uppercase;
 }
-
-.nav-link:hover {
-  color: #fff !important;
+.nav-underline .nav-link.active, .nav-underline .show>.nav-link{
+  color: #2193b0;
+}
+.nav-link {
+  color: #4a4a4a;
+  position: relative;
+  font-weight: 600;
+  padding: 0 20px;
+}
+.nav-link.active::after{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  top: 47px;
+  bottom: 0;
+  left: 0;
+  background: #2193b0;
 }
 
 .title {
   color: #2193b0;
+}
+.reload {
+  float: right;
+  cursor: pointer;
+}
+.card-box1 {
+  border-radius: 8px;
+}
+.title2 {  
+  padding-top: 15px;
+  color: #4a4a4a;
+  background: none;
+  border-radius: 12px;
+  border-bottom: 1px solid #fff;
+  /* background: #ebebeb;
+  border-bottom: 1px solid #dedede; */
+}
+.title2 h6{
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .form-label {
@@ -53,5 +95,4 @@ input, textarea, select {
   border-radius: 15px;
   border: 2px solid #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
 }
